@@ -1,0 +1,11 @@
+- name: Configure my laptop
+  hosts: all
+  vars:
+    machine_type: "laptop"
+  roles:
+    - role: xdg
+    - role: packages
+    - role: dotfiles
+    - role: development
+    - role: rice
+    - role: authentication

@@ -1,0 +1,6 @@
+---
+- name: Import authentication setup tasks
+  ansible.builtin.import_tasks: gpg.yml
+
+- name: Import SSH setup tasks
+  ansible.builtin.import_tasks: ssh.yml

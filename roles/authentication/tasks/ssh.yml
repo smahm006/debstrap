@@ -1,0 +1,25 @@
+---
+- name: Ensure SSH directory exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Ensure correct permissions on SSH files
+  ansible.builtin.find:
+    paths: "{{ ansible_env.HOME }}/.ssh"
+    recurse: true
+  register: ssh_files
+
+- name: Fix permissions for SSH files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    mode: >-
+      {% if item.path | regex_search('authorized_keys$') %}
+      0644
+      {% elif item.path | regex_search('\.pub$') %}
+      0644
+      {% else %}
+      {{ '0700' if item.isdir else '0600' }}
+      {% endif %}
+  loop: "{{ ssh_files.files }}"

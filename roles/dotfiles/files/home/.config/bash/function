@@ -1,0 +1,91 @@
+# Move and change to directory
+mvcd (){
+    mv -- "${@:1:$#-1}" "${@: -1}" && cd -- "${@: -1}"
+}
+
+# Create and change to directory
+mkcd (){
+    mkdir -p -- "$1" && cd -- "$1"
+}
+
+# Open file with defautlt application
+o () {
+    command xdg-open "$@" & disown
+
+}
+
+# Open PDF file with Zathura
+pdf () {
+    zathura "$@" & disown
+
+}
+
+# Search with --help if not man if not google
+rtfm() {
+    $@ --help 2> /dev/null || man $@ 2> /dev/null || open "http://www.google.com/search?q=$@";
+}
+
+# Create backup of directory/file
+backup() {
+    cp -- "$1"{,.bak};
+}
+
+# Rename file in nested directory
+rnm() {
+    filedir=$(dirname $1)
+    mv $1 $filedir/$2
+}
+
+# Extract any kind of archive
+ex () {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf $1;;
+            *.tar.gz)    tar xvzf $1;;
+            *.bz2)       bunzip2 $1 ;;
+            *.rar)       unrar x $1 ;;
+            *.gz)        gunzip $1  ;;
+            *.tar)       tar xvf $1 ;;
+            *.tbz2)      tar xvjf $1;;
+            *.tgz)       tar xvzf $1;;
+            *.zip)       unzip $1   ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1;;
+            *) echo "don't know how to extract '$1'..." ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
+}
+
+# Go up N directories
+up () {
+      local d=""
+      local limit="$1"
+
+      # Default to limit of 1
+      if [ -z "$limit" ] || [ "$limit" -le 0 ]; then
+      limit=1
+      fi
+
+      for ((i=1;i<=limit;i++)); do
+      d="../$d"
+      done
+
+      # perform cd. Show error if cd fails
+      if ! cd "$d"; then
+      echo "Can't move up $limit directories.";
+      fi
+}
+
+# Perform quick calculation
+calc() { printf "%s\n" "$@" | bc -l; }
+
+# Outputs the current epoch time or converts argument to human-readable date and time
+epoch() {
+  if [ $# -eq 0 ]; then
+    date +%s
+  else
+    date -d @"$@" -R
+  fi
+}

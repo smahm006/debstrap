@@ -1,0 +1,168 @@
+### ────────── Core Settings ────────── ###
+xwayland disable
+set $mod Mod4
+font pango:Maple Mono NF Font 10
+
+### ────────── Gaps ────────── ###
+gaps inner 10
+gaps outer 0
+smart_gaps on
+smart_borders on
+default_border pixel 1
+default_floating_border normal
+for_window [class="^.*"] border pixel 0
+
+### ────────── Theme ────────── ###
+client.focused #ffffff #ffffff #ffffff #ffffff #ffffff
+set $gnome-schema org.gnome.desktop.interface
+exec_always {
+    gsettings set $gnome-schema color-scheme 'prefer-dark'
+    gsettings set $gnome-schema gtk-theme 'Materia-Blackout'
+    gsettings set $gnome-schema icon-theme 'Materia-Blackout-Icons'
+    gsettings set $gnome-schema cursor-theme 'Notwaita-Black'
+    # gsettings set $gnome-schema font-name 'Your font name'
+}
+
+### ────────── Output (Screen) ────────── ###
+set $laptop eDP-1
+output $laptop bg ~/media/image/wallpaper/currentwallpaper.jpg fill
+
+### ────────── Input ────────── ###
+input type:pointer {
+  accel_profile    adaptive
+  natural_scroll   disabled
+  middle_emulation enabled
+  pointer_accel    0.5
+  scroll_factor    0.5
+  scroll_button    BTN_SIDE
+  scroll_method    on_button_down
+}
+
+input type:touchpad {
+  natural_scroll   disabled
+  accel_profile    adaptive
+  click_method     button_areas
+  drag             enabled
+  dwt              enabled
+  middle_emulation enabled
+  pointer_accel    0.5
+  scroll_method    two_finger
+  scroll_factor    1.5
+  tap              enabled
+}
+input type:touch {
+  events disabled
+}
+
+### ────────── Workspace ────────── ###
+workspace_layout default
+workspace_auto_back_and_forth no
+
+### ────────── Floating Rules (Optional) ────────── ###
+# for example:
+# for Flameshot GUI or other popups
+for_window [title="grimshot"] floating enable
+for_window [title="copyq"] floating enable
+for_window [app_id="foot-dropdown"] floating enable, \
+    border pixel 1, \
+    resize set 60 ppt 60 ppt, \
+    move position center, \
+    move to scratchpad, \
+    scratchpad show
+
+### ────────── Autostart ────────── ###
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+exec wl-paste --watch cliphist store
+exec blueman-applet
+exec swaync
+exec swayidle -w \
+    timeout 300 'swayexit lock' \
+    timeout 600 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' \
+    before-sleep 'swayexit lock'
+
+### ────────── Keybindings ────────── ###
+
+# App
+bindsym $mod+Shift+q kill
+bindsym $mod+x exec firefox
+bindsym $mod+e exec emacs -nsl
+bindsym $mod+t exec thunar
+bindsym $mod+0 exec swaync-client -t -sw
+
+# Terminal
+bindsym $mod+Return exec (swaymsg "[app_id=foot-dropdown] scratchpad show") || exec foot -a foot-dropdown
+bindsym $mod+Shift+Return exec foot
+
+# Menu
+bindsym $mod+d exec tofi-drun -c ~/.config/tofi/fullscreen-config | xargs swaymsg exec --
+bindsym $mod+Shift+d exec tofi-run -c ~/.config/tofi/fullscreen-config | xargs swaymsg exec --
+bindsym $mod+c exec cliphist list | tofi -c ~/.config/tofi/cliphist-config | cliphist decode | wl-copy
+bindsym $mod+Shift+c exec cliphist wipe
+
+# Workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+
+
+# Focus
+bindsym $mod+b focus left
+bindsym $mod+n focus down
+bindsym $mod+p focus up
+bindsym $mod+f focus right
+
+# Move windows
+bindsym $mod+Shift+b move left
+bindsym $mod+Shift+n move down
+bindsym $mod+Shift+p move up
+bindsym $mod+Shift+f move right
+
+# Layout
+bindsym $mod+u fullscreen toggle
+bindsym $mod+h splith
+bindsym $mod+v splitv
+bindsym $mod+space layout toggle split
+bindsym $mod+Shift+space floating toggle
+
+
+# Screenshot
+bindsym Print exec grimshot copy area
+bindsym $mod+Print exec grimshot save area ~/media/image/screenshot/$(date +"%Y-%m-%d-%H-%M-%S").png
+bindsym $mod+Shift+Print exec grimshot save screen ~/media/image/screenshot/$(date +"%Y-%m-%d-%H-%M-%S").png
+
+# Volume
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Brightness
+bindsym XF86MonBrightnessUp exec brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec brightnessctl set 10%-
+
+# Lock screen
+bindsym $mod+i exec swayexit lock
+
+# Reload / Exit
+bindsym $mod+Shift+r reload
+
+### ────────── Bar (Waybar) ────────── ###
+bar {
+    swaybar_command waybar
+    position bottom
+}

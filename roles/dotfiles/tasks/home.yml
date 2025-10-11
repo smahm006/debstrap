@@ -1,0 +1,15 @@
+---
+- name: Link user dotfiles
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/home"
+    file_type: file
+    recurse: true
+  register: home_dotfiles
+
+- name: Ensure home dotfiles are symlinked
+  ansible.builtin.file:
+    src: "{{ item.path }}"
+    dest: "{{ ansible_env.HOME }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '') }}"
+    state: link
+    force: true
+  loop: "{{ home_dotfiles.files }}"

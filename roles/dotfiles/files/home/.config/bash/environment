@@ -1,0 +1,60 @@
+# User XDG directories
+export XDG_DESKTOP_DIR="$HOME"
+export XDG_DOWNLOAD_DIR="$HOME/dump"
+export XDG_TEMPLATES_DIR="$HOME"
+export XDG_PUBLICSHARE_DIR="$HOME"
+export XDG_DOCUMENTS_DIR="$HOME/org"
+export XDG_MUSIC_DIR="$HOME/media/audio"
+export XDG_PICTURES_DIR="$HOME/media/image"
+export XDG_VIDEOS_DIR="$HOME/media/video"
+
+# Default user directories
+export WORKSTATION="$HOME/workstation"
+export RESOURCES="$WORKSTATION/resources"
+export ARCHITECTURE="$WORKSTATION/architecture"
+export WORKON_HOME="$ARCHITECTURE/virtualmachines/virtualbox"
+export VAGRANT_HOME="$ARCHITECTURE/virtualmachines/vagrant"
+export VAGRANT_ALIAS_FILE="$ARCHITECTURE/virtualmachines/vagrant/aliases"
+export MEDIA="$HOME/media"
+export PROJECTS="$WORKSTATION/projects"
+export APPLICATIONS="$HOME/apps"
+export VAULT="$HOME/vault"
+export PASSWORD_STORE_DIR="$HOME/vault"
+
+# Sway
+export MOZ_ENABLE_WAYLAND=1
+export SDL_VIDEODRIVER=wayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+export QT_QPA_PLATFORM=wayland
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_DESKTOP=sway
+
+# Default editors
+export GUI_EDITOR="emacs -q -nw"
+export VISUAL="emacs -q -nw"
+export EDITOR="$VISUAL"
+
+# Default programs
+export TERM=xterm-256color
+export TERMINAL="alacritty"
+export BROWSER="firefox"
+
+# Toolchains
+export GOBIN="$ARCHITECTURE/toolchains/go/bin"
+export GOROOT="$ARCHITECTURE/toolchains/go"
+export GOPATH="$GOROOT/bin"
+export CARGO_HOME="$ARCHITECTURE/toolchains/rust/.cargo"
+export RUSTUP_HOME="$ARCHITECTURE/toolchains/rust/.rustup"
+
+# HSTR
+export HSTR_CONFIG="raw-history-view,hicolor"
+export HISTCONTROL="ignorespace"
+export HISTFILESIZE="10000"
+export HISTSIZE="${HISTFILESIZE}"
+
+# Path for binaries
+export PATH="\
+$PATH:\
+$HOME/.local/cbin:\
+$GOBIN:\
+$CARGO_HOME/bin"

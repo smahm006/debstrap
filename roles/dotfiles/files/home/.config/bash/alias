@@ -1,0 +1,54 @@
+# System
+alias sudo="sudo "
+alias apt="sudo apt"
+alias rm="echo use /bin/rm if you are serious, otherwise consider using trash.; true"
+alias pls='sudo "$BASH" -c "$(history -p !!)"'
+alias ps="ps aux"
+alias free="free -m"
+alias more="less"
+alias cp="cp -i"
+alias mv="mv -i"
+alias mkdir="mkdir -p"
+alias tr="trash"
+alias hh="hstr"
+alias ssh="TERM=xterm-color ssh"
+
+# Text
+alias ls="ls --color=auto"
+alias dir="dir --color=auto"
+alias vdir="vdir --color=auto"
+alias l="ls"
+alias la="ls -A"
+alias ll="ls -l --human-readable --group-directories-first --classify --time-style=long-iso"
+alias lla="ls -la --human-readable --group-directories-first --classify --time-style=long-iso"
+alias latest='ls -t | head -n1'
+alias grep="grep --color=auto"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
+
+# Permissions
+alias xec="chmod +x"
+alias own="sudo chown -R $USER"
+
+# Editor
+alias vi="vim"
+alias em="emacs -q -nw"
+
+# Network
+alias wget="wget --hsts-file=$XDG_DATA_HOME/wget-hsts"
+
+# Version Control
+alias diff='diff --color'
+
+# Docker
+alias dcrestart='docker compose down -v && docker compose up -d'
+
+# Virtualenv
+alias venv="source .venv/bin/activate"
+
+# GPG
+alias switch-keys="gpg-connect-agent 'scd serialno' 'learn --force' /bye"
+alias gpg-restart="gpg-connect-agent killagent /bye && gpg-connect-agent /bye"
+
+# MISC
+alias weather="curl wttr.in/Kanata+Ontario+Canada | head -n -2"

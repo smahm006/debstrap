@@ -1,0 +1,15 @@
+---
+- name: Link root dotfiles
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/root"
+    file_type: file
+    recurse: true
+  register: root_dotfiles
+
+- name: Ensure root dotfiles are symlinked
+  ansible.builtin.file:
+    src: "{{ item.path }}"
+    dest: "/{{ item.path | regex_replace('^' + (role_path ~ '/files/root/') , '') }}"
+    state: link
+    force: true
+  loop: "{{ root_dotfiles.files }}"

@@ -1,0 +1,321 @@
+{
+  // Sway Workspace. CHOOSE as desired and place on waybar configs
+  // Circles Style
+  "sway/workspaces": {
+	  "active-only": true,
+	  "all-outputs": false,
+	  "format": "{icon}",
+	  "sort-by-number": true,
+	  "on-click": "activate",
+	  "disable-scroll": false,
+	  "persistent-workspaces": {
+	  },
+	  "format-icons": {
+		"focused": "",
+		"default": "",
+	  },
+  },
+
+  // GROUP
+
+  "group/motherboard": {
+	  "orientation": "horizontal",
+	  "modules": [
+		"cpu",
+		"memory",
+		"temperature",
+		"disk",
+		]
+  },
+
+  "group/laptop": {
+	  "orientation": "horizontal",
+	  "modules": [
+		"backlight",
+		"battery",
+		]
+  },
+
+  "group/audio": {
+	  "orientation": "horizontal",
+	  "modules": [
+		"pulseaudio",
+		"pulseaudio#microphone",
+		]
+  },
+
+  "backlight": {
+	  "interval": 2,
+	  "align": 0,
+	  "rotate": 0,
+	  //"format": "{icon} {percent}%",
+	  "format": "{icon}",
+	  "format-icons": ["","","","","","","","","","","","","","",""],
+	  "tooltip-format": "backlight {percent}%",
+	  "icon-size": 10,
+	  "on-click": "",
+	  "on-click-middle": "",
+	  "on-click-right": "",
+	  "on-update": "",
+	  "on-scroll-up": "brightnessctl set +5%",
+	  "on-scroll-down": "brightnessctl set 5%-",
+	  "smooth-scrolling-threshold": 1,
+  },
+
+  "battery": {
+	  //"interval": 5,
+	  "align": 0,
+	  "rotate": 0,
+	  //"bat": "BAT1",
+	  //"adapter": "ACAD",
+	  "full-at": 100,
+	  "design-capacity": false,
+	  "states": {
+		"good": 95,
+		"warning": 30,
+		"critical": 15
+			   },
+	  "format": "{icon} {capacity}%",
+	  "format-charging": "{capacity}%",
+	  "format-plugged": "󱘖 {capacity}%",
+	  "format-alt-click": "click",
+	  "format-full": "{icon}",
+	  "format-alt": "{icon} {time}",
+	  "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+	  "format-time": "{H}h {M}min",
+	  "tooltip": true,
+	  "tooltip-format": "{timeTo} {power}w",
+	  "on-click-right": "~/.config/hypr/scripts/wlogout.sh",
+  },
+
+  "bluetooth": {
+	  "format": "",
+	  "format-disabled": "󰂳",
+	  "format-connected": "󰂱",
+	  "tooltip-format": " {device_alias}",
+	  "tooltip-format-connected": "{device_enumerate}",
+	  "tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
+	  "tooltip": true,
+	  "on-click": "blueman-manager",
+  },
+
+  "clock": {
+	  "interval": 1,
+	  //"format": " {:%I:%M %p}", // AM PM format
+	  "format": "{:%H:%M}",
+	  "format-alt": " {:%H:%M   %Y, %d %B, %A}",
+	  "tooltip-format": "<tt><small>{calendar}</small></tt>",
+	  "calendar": {
+		"mode"          : "year",
+		"mode-mon-col"  : 3,
+		"weeks-pos"     : "right",
+		"on-scroll"     : 1,
+		"format": {
+		"months":     "<span color='#ffead3'><b>{}</b></span>",
+		"days":       "<span color='#ecc6d9'><b>{}</b></span>",
+		"weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+		"weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+		"today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+				  }
+				  }
+	  },
+	  "actions":  {
+		"on-click-right": "mode",
+		"on-click-forward": "tz_up",
+		"on-click-backward": "tz_down",
+		"on-scroll-up": "shift_up",
+		"on-scroll-down": "shift_down"
+  },
+
+  "cpu": {
+	  "format": "󰍛 {usage}%",
+	  "interval": 1,
+	  "format-alt-click": "click",
+	  "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+	  "on-click": "foot --title btop sh -c 'btop'",
+  },
+
+
+  "memory": {
+	  "interval": 10,
+	  "format": "󰾆 {percentage}%",
+	  "format-alt": "󰾆 {used:0.1f}G",
+	  "format-alt-click": "click",
+	  "tooltip": true,
+	  "tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
+  },
+
+  "disk": {
+	  "interval": 30,
+	  //"format": "󰋊",
+	  "path": "/",
+	  //"format-alt-click": "click",
+	  "format": "{percentage_used}% 󰋊",
+	  //"tooltip": true,
+	  "tooltip-format": "{used} used out of {total} on {path} ({percentage_used}%)",
+  },
+
+  "idle_inhibitor": {
+	  "format": "{icon}",
+	  "format-icons": {
+		"activated": " ",
+		"deactivated": " ",
+					  }
+  },
+
+  "keyboard-state": {
+	  //"numlock": true,
+	  "capslock": true,
+	  "format": {
+		"numlock": "N {icon}",
+	  "capslock":"󰪛 {icon}",
+		  },
+	  "format-icons": {
+		"locked": "",
+		"unlocked": ""
+				},
+  },
+
+  "network": {
+	  "format": "{ifname}",
+	  "format-wifi": "{icon}",
+	  "format-ethernet": "󰌘",
+	  "format-disconnected": "󰌙",
+	  "tooltip-format": "{ipaddr}  {bandwidthUpBytes}  {bandwidthDownBytes}",
+	  "format-linked": "󰈁 {ifname} (No IP)",
+	  "tooltip-format-wifi": "{essid} {icon} {signalStrength}%",
+	  "tooltip-format-ethernet": "{ifname} 󰌘",
+	  "tooltip-format-disconnected": "󰌙 Disconnected",
+	  "max-length": 50,
+	  "format-icons": ["󰤯","󰤟","󰤢","󰤥","󰤨"],
+	  "on-click": "foot --title nmtui bash -c 'nmtui'"
+  },
+
+  "pulseaudio": {
+	  "format": "{icon}",
+	  "format-bluetooth": "{icon}",
+	  "format-muted": "󰖁",
+	  "format-icons": {
+	  	  "default": ["", "", "󰕾", ""],
+	  },
+	  "scroll-step": 5.0,
+	  "on-click": "pavucontrol -t 3",
+	  "on-click-middle": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+	  "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+	  "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
+	  "tooltip-format": "{icon} {desc} | {volume}%",
+	  "smooth-scrolling-threshold": 1,
+  },
+
+  "pulseaudio#microphone": {
+	  "format": "{format_source}",
+	  "format-source": "",
+	  "format-source-muted": "",
+	  "on-click-middle": "pactl set-source-mute @DEFAULT_SOURCE@ toggle",
+	  "on-click": "pavucontrol -t 4",
+	  "on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +5%",
+	  "on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -5%",
+	  "tooltip-format": "{source_desc} | {source_volume}%",
+	  "scroll-step": 5,
+  },
+
+  "temperature": {
+	  "interval": 10,
+	  "tooltip": true,
+	  "hwmon-path": ["/sys/class/hwmon/hwmon1/temp1_input", "/sys/class/thermal/thermal_zone0/temp"],
+	  //"thermal-zone": 0,
+	  "critical-threshold": 82,
+	  "format-critical": "{icon} {temperatureC}°C",
+	  "format": "{icon} {temperatureC}°C",
+	  "format-icons": ["󰈸"],
+	  "on-click": "foot --title nvtop sh -c 'nvtop'"
+  },
+
+  "tray": {
+	  "icon-size": 15,
+	  "spacing": 8,
+  },
+
+  "custom/menu": {
+	  "format": "{}",
+	  "exec": "echo ; echo 󱓟 app launcher",
+	  "interval" : 86400, // once every day
+	  "tooltip": true,
+	  "on-click": "tofi-drun | xargs swaymsg exec --",
+  },
+
+  "custom/power": {
+	  "format": "⏻ ",
+	  "exec": "echo ; echo 󰟡 power // blur",
+	  "on-click": "~/.config/hypr/scripts/wlogout.sh",
+	  "interval" : 86400, // once every day
+	  "tooltip": true,
+  },
+
+  "custom/swaync": {
+	  "tooltip":true,
+	  "format": "{icon} {}",
+	  "format-icons": {
+		"notification": "<span foreground='red'><sup></sup></span>",
+		"none": "",
+		"dnd-notification": "<span foreground='red'><sup></sup></span>",
+		"dnd-none": "",
+		"inhibited-notification": "<span foreground='red'><sup></sup></span>",
+		"inhibited-none": "",
+		"dnd-inhibited-notification": "<span foreground='red'><sup></sup></span>",
+		"dnd-inhibited-none": ""
+	  },
+	  "return-type": "json",
+	  "exec-if": "which swaync-client",
+	  "exec": "swaync-client -swb",
+	  "on-click": "sleep 0.1 && swaync-client -t -sw",
+	  "on-click-right": "swaync-client -d -sw",
+	  "escape": true,
+  },
+
+  "custom/weather": {
+	  "format": " {}",
+	  "tooltip": true,
+	  "interval": 1800,
+	  "exec": "wttrbar --nerd --date-format '%A, %d %b %Y' --location Ottawa --hide-conditions --custom-indicator '{ICON} {temp_C}'",
+	  "return-type": "json",
+  },
+
+  // Separators
+  "custom/separator#dot": {
+	  "format": "",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+  "custom/separator#dot-line": {
+	  "format": "",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+  "custom/separator#line": {
+	  "format": "|",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+  "custom/separator#blank": {
+	  "format": "",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+  "custom/separator#blank_2": {
+	  "format": "  ",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+  "custom/separator#blank_3": {
+	  "format": "   ",
+	  "interval": "once",
+	  "tooltip": false
+  },
+
+}

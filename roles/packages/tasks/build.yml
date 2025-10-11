@@ -1,0 +1,13 @@
+---
+- name: Install build tools and development helpers
+  apt:
+    name:
+      - automake
+      - autotools-dev
+      - cmake
+      - make
+      - meson
+      - ninja-build
+    state: present
+    update_cache: true
+    install_recommends: true

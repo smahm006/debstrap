@@ -1,0 +1,9 @@
+---
+- name: Install audio packages
+  apt:
+    name:
+      - pipewire-pulse
+      - wireplumber
+    state: present
+    update_cache: true
+    install_recommends: true

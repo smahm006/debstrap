@@ -1,0 +1,28 @@
+---
+- import_tasks: base.yml
+  become: true
+- import_tasks: build.yml
+  become: true
+- import_tasks: network.yml
+  become: true
+- import_tasks: security.yml
+  become: true
+- import_tasks: power.yml
+  become: true
+- import_tasks: utility.yml
+  become: true
+- import_tasks: libs.yml
+  become: true
+- import_tasks: applications.yml
+  become: true
+- import_tasks: audio.yml
+  become: true
+- import_tasks: android.yml
+  become: true
+- import_tasks: firefox.yml
+  become: true
+- name: Upgrade all packages to latest version
+  apt:
+    upgrade: full
+    update_cache: true
+  become: true

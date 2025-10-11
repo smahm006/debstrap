@@ -1,0 +1,9 @@
+---
+- name: Install power management utilities
+  apt:
+    name:
+      - acpi
+      - tlp
+    state: present
+    update_cache: true
+    install_recommends: true

@@ -1,0 +1,16 @@
+---
+- name: Install authentication-related packages
+  apt:
+    name:
+      - cryptsetup
+      - dirmngr
+      - gnupg-agent
+      - gnupg2
+      - pcscd
+      - scdaemon
+      - wget
+      - yubikey-manager
+      - yubikey-personalization
+    state: present
+    update_cache: true
+    install_recommends: false

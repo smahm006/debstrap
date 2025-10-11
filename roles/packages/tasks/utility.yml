@@ -1,0 +1,40 @@
+---
+- name: Install utility packages
+  apt:
+    name:
+      - bc
+      - desktop-file-utils
+      - ethtool
+      - fd-find
+      - ffmpegthumbnailer
+      - fzf
+      - gzip
+      - hstr
+      - imagemagick
+      - jq
+      - mediainfo
+      - nano
+      - ncdu
+      - nvme-cli
+      - p7zip
+      - parallel
+      - parted
+      - pinentry-tty
+      - redshift-gtk
+      - ripgrep
+      - scdaemon
+      - scdoc
+      - screen
+      - trash-cli
+      - tree
+      - udevil
+      - unrar-free
+      - usbutils
+      - xdg-user-dirs
+      - xdg-user-dirs-gtk
+      - xdg-utils
+      - yq
+      - zip
+    state: present
+    update_cache: true
+    install_recommends: false

@@ -1,0 +1,17 @@
+---
+- name: Install common applications
+  apt:
+    name:
+      - blueman
+      - flatpak
+      - gparted
+      - libreoffice-base
+      - qbittorrent
+      - sxiv
+      - texinfo
+      - vim
+      - wine
+      - zathura
+    state: present
+    update_cache: true
+    install_recommends: false

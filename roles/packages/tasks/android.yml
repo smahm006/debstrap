@@ -1,0 +1,10 @@
+---
+- name: Install Android tools
+  apt:
+    name:
+      - adb
+      - fastboot
+      - heimdall-flash
+    state: present
+    update_cache: true
+    install_recommends: false

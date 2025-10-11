@@ -1,0 +1,20 @@
+---
+- name: Install base packages
+  apt:
+    name:
+      - apt-transport-https
+      - bash-completion
+      - build-essential
+      - dkms
+      - git
+      - gnupg
+      - gnupg2
+      - linux-base
+      - linux-headers-{{ ansible_kernel }}
+      - lsb-release
+      - man-db
+      - manpages
+      - suckless-tools
+    state: present
+    update_cache: true
+    install_recommends: true

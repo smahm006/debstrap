@@ -1,0 +1,16 @@
+---
+- name: Install network packages
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - iwd
+      - net-tools
+      - network-manager
+      - nmap
+      - openssh-server
+      - wget
+      - wireless-tools
+    state: present
+    update_cache: true
+    install_recommends: true

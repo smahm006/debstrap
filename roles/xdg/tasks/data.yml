@@ -1,0 +1,17 @@
+---
+- name: Create XDG data directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ xdg_data_home }}"
+    - "{{ xdg_data_home }}/gnupg"
+    - "{{ xdg_data_home }}/python"
+    - "{{ xdg_data_home }}/npm"
+    - "{{ xdg_data_home }}/wine"
+    - "{{ xdg_data_home }}/fonts"
+    - "{{ xdg_data_home }}/icons"
+    - "{{ xdg_data_home }}/themes"
+    - "{{ xdg_data_home }}/terminfo"
+    - "{{ xdg_data_home }}/.pki"

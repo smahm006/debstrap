@@ -1,0 +1,14 @@
+---
+- name: Create media directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ media_home }}"
+    - "{{ media_home }}/audio"
+    - "{{ media_home }}/video"
+    - "{{ media_home }}/image"
+    - "{{ media_home }}/image/wallpaper"
+    - "{{ media_home }}/image/screenshot"
+    - "{{ media_home }}/image/misc"

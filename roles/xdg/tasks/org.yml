@@ -1,0 +1,13 @@
+---
+- name: Create org directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ org_home }}"
+    - "{{ org_home }}/docs"
+    - "{{ org_home }}/misc"
+    - "{{ org_home }}/books"
+    - "{{ org_home }}/backup"
+    - "{{ org_home }}/proffesional"

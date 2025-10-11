@@ -1,0 +1,12 @@
+---
+- name: Create XDG state directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ xdg_state_home }}"
+    - "{{ xdg_state_home }}/bash"
+    - "{{ xdg_state_home }}/less"
+    - "{{ xdg_state_home }}/python"
+    - "{{ xdg_state_home }}/node"

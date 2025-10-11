@@ -1,6 +1,6 @@
 ---
 - name: Install network packages
-  apt:
+  ansible.builtin.apt:
     name:
       - ca-certificates
       - curl

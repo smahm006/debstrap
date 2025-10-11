@@ -1,6 +1,6 @@
 ---
 - name: Install base packages
-  apt:
+  ansible.builtin.apt:
     name:
       - apt-transport-https
       - bash-completion

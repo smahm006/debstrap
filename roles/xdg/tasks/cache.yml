@@ -1,0 +1,10 @@
+---
+- name: Create XDG cache directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ xdg_cache_home }}"
+    - "{{ xdg_cache_home }}/X11"
+    - "{{ xdg_cache_home }}/python"

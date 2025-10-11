@@ -1,6 +1,6 @@
 ---
 - name: Install development libraries
-  apt:
+  ansible.builtin.apt:
     name:
       - lbzip2
       - libacl1-dev
@@ -77,3 +77,4 @@
     update_cache: true
     install_recommends: false
   ignore_errors: true
+  register: ignore_errors_register

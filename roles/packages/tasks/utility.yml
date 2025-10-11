@@ -1,6 +1,6 @@
 ---
 - name: Install utility packages
-  apt:
+  ansible.builtin.apt:
     name:
       - bc
       - desktop-file-utils

@@ -1,6 +1,6 @@
 ---
 - name: Install authentication-related packages
-  apt:
+  ansible.builtin.apt:
     name:
       - cryptsetup
       - dirmngr

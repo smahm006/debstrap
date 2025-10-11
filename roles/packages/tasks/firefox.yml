@@ -1,18 +1,18 @@
 ---
 - name: Ensure directory for APT repository keys exists
-  file:
+  ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
     mode: '0755'
 
 - name: Download Mozilla APT signing key
-  get_url:
+  ansible.builtin.get_url:
     url: https://packages.mozilla.org/apt/repo-signing-key.gpg
     dest: /etc/apt/keyrings/packages.mozilla.org.asc
     mode: '0644'
 
 - name: Add Mozilla APT repository for Debian Trixie and newer
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/sources.list.d/mozilla.sources
     content: |
       Types: deb
@@ -20,21 +20,23 @@
       Suites: mozilla
       Components: main
       Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
+    mode: '0644'
 
 - name: Set APT pinning for Mozilla repository
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/preferences.d/mozilla
     content: |
       Package: *
       Pin: origin packages.mozilla.org
       Pin-Priority: 1000
+    mode: '0644'
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   changed_when: false
 
 - name: Install Firefox
-  apt:
+  ansible.builtin.apt:
     name: firefox
     state: present

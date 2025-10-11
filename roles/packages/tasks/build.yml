@@ -1,6 +1,6 @@
 ---
 - name: Install build tools and development helpers
-  apt:
+  ansible.builtin.apt:
     name:
       - automake
       - autotools-dev

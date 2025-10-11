@@ -1,0 +1,19 @@
+---
+- name: Create workstation directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ workstation_home }}"
+    - "{{ workstation_home }}/projects"
+    - "{{ workstation_home }}/projects/private"
+    - "{{ workstation_home }}/projects/public"
+    - "{{ workstation_home }}/projects/archive"
+    - "{{ workstation_home }}/projects/sandbox"
+    - "{{ workstation_home }}/resources"
+    - "{{ workstation_home }}/architecture"
+    - "{{ workstation_home }}/architecture/toolchains"
+    - "{{ workstation_home }}/architecture/toolchains/rust"
+    - "{{ workstation_home }}/architecture/virtualmachines"
+    - "{{ workstation_home }}/architecture/virtualmachines/vagrant"

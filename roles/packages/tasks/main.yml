@@ -1,28 +1,39 @@
 ---
-- import_tasks: base.yml
+- name: Import task base.yml
+  ansible.builtin.import_tasks: base.yml
   become: true
-- import_tasks: build.yml
+- name: Import task build.yml
+  ansible.builtin.import_tasks: build.yml
   become: true
-- import_tasks: network.yml
+- name: Import task network.yml
+  ansible.builtin.import_tasks: network.yml
   become: true
-- import_tasks: security.yml
+- name: Import task security.yml
+  ansible.builtin.import_tasks: security.yml
   become: true
-- import_tasks: power.yml
+- name: Import task power.yml
+  ansible.builtin.import_tasks: power.yml
   become: true
-- import_tasks: utility.yml
+- name: Import task utility.yml
+  ansible.builtin.import_tasks: utility.yml
   become: true
-- import_tasks: libs.yml
+- name: Import task libs.yml
+  ansible.builtin.import_tasks: libs.yml
   become: true
-- import_tasks: applications.yml
+- name: Import task applications.yml
+  ansible.builtin.import_tasks: applications.yml
   become: true
-- import_tasks: audio.yml
+- name: Import task audio.yml
+  ansible.builtin.import_tasks: audio.yml
   become: true
-- import_tasks: android.yml
+- name: Import task android.yml
+  ansible.builtin.import_tasks: android.yml
   become: true
-- import_tasks: firefox.yml
+- name: Import task firefox.yml
+  ansible.builtin.import_tasks: firefox.yml
   become: true
 - name: Upgrade all packages to latest version
-  apt:
+  ansible.builtin.apt:
     upgrade: full
     update_cache: true
   become: true

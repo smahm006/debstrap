@@ -1,0 +1,13 @@
+- name: Remove unwanted default directories (Desktop, Documents, etc.)
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ ansible_env.HOME }}/Desktop"
+    - "{{ ansible_env.HOME }}/Documents"
+    - "{{ ansible_env.HOME }}/Downloads"
+    - "{{ ansible_env.HOME }}/Pictures"
+    - "{{ ansible_env.HOME }}/Videos"
+    - "{{ ansible_env.HOME }}/Music"
+    - "{{ ansible_env.HOME }}/Templates"
+    - "{{ ansible_env.HOME }}/Public"

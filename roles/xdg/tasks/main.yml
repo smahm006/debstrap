@@ -1,0 +1,21 @@
+---
+- name: Import task data.yml
+  ansible.builtin.import_tasks: data.yml
+- name: Import task config.yml
+  ansible.builtin.import_tasks: config.yml
+- name: Import task cache.yml
+  ansible.builtin.import_tasks: cache.yml
+- name: Import task state.yml
+  ansible.builtin.import_tasks: state.yml
+- name: Import task workstation.yml
+  ansible.builtin.import_tasks: workstation.yml
+- name: Import task media.yml
+  ansible.builtin.import_tasks: media.yml
+- name: Import task org.yml
+  ansible.builtin.import_tasks: org.yml
+- name: Import task apps.yml
+  ansible.builtin.import_tasks: apps.yml
+- name: Import task ssh.yml
+  ansible.builtin.import_tasks: ssh.yml
+- name: Import task delete.yml
+  ansible.builtin.import_tasks: delete.yml

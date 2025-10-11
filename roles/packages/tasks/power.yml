@@ -1,6 +1,6 @@
 ---
 - name: Install power management utilities
-  apt:
+  ansible.builtin.apt:
     name:
       - acpi
       - tlp

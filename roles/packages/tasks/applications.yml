@@ -1,6 +1,6 @@
 ---
 - name: Install common applications
-  apt:
+  ansible.builtin.apt:
     name:
       - blueman
       - flatpak

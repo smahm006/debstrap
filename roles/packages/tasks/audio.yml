@@ -1,6 +1,6 @@
 ---
 - name: Install audio packages
-  apt:
+  ansible.builtin.apt:
     name:
       - pipewire-pulse
       - wireplumber

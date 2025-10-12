@@ -1,0 +1,42 @@
+---
+- name: Get latest Go version metadata
+  ansible.builtin.uri:
+    url: https://go.dev/dl/?mode=json
+    return_content: true
+  register: go_releases
+
+- name: Set Go version fact
+  ansible.builtin.set_fact:
+    go_version: "{{ (go_releases.json | first).version }}"
+
+- name: Download Go tarball
+  ansible.builtin.get_url:
+    url: "https://golang.org/dl/{{ go_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/{{ go_version }}.linux-amd64.tar.gz"
+    mode: '0644'
+
+- name: Remove old Go toolchain
+  become: true
+  ansible.builtin.file:
+    path: "{{ workstation_home }}/architecture/toolchains/go"
+    state: absent
+
+- name: Extract Go toolchain
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ go_version }}.linux-amd64.tar.gz"
+    dest: "{{ workstation_home }}/architecture/toolchains"
+    remote_src: true
+    creates: "{{ workstation_home }}/architecture/toolchains/go/bin/go"
+
+- name: Install Go tools
+  ansible.builtin.command:
+    cmd: "{{ workstation_home }}/architecture/toolchains/go/bin/go install {{ item }}"
+  register: command_result
+  changed_when: command_result.stdout != ""
+  loop:
+    - golang.org/x/tools/gopls@latest
+    - golang.org/x/tools/cmd/goimports@latest
+    - mvdan.cc/gofumpt@latest
+  environment:
+    GOROOT: "{{ workstation_home }}/architecture/toolchains/go"
+    GOPATH: "{{ workstation_home }}/architecture/toolchains/go/bin"

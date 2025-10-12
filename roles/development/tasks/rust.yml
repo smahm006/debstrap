@@ -1,0 +1,30 @@
+---
+- name: Ensure Rust directories exist
+  ansible.builtin.file:
+    path: "{{ workstation_home }}/architecture/toolchains/rust"
+    state: directory
+    mode: '0755'
+
+- name: Download Rustup install script
+  ansible.builtin.get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/rustup-init.sh
+    mode: '0755'
+
+- name: Install Rustup
+  ansible.builtin.command:
+    cmd: sh /tmp/rustup-init.sh -y
+  environment:
+    CARGO_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.cargo"
+    RUSTUP_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.rustup"
+  args:
+    creates: "{{ workstation_home }}/architecture/toolchains/rust/.cargo/bin/rustc"
+
+- name: Add rust-src component
+  ansible.builtin.command:
+    cmd: "{{ workstation_home }}/architecture/toolchains/rust/.cargo/bin/rustup component add rust-src"
+  register: command_result
+  changed_when: "'is up to date' in command_result"
+  environment:
+    CARGO_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.cargo"
+    RUSTUP_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.rustup"

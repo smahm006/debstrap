@@ -1,0 +1,14 @@
+---
+- name: Install Vagrant with libvirt
+  ansible.builtin.apt:
+    name:
+      - vagrant-libvirt
+      - libvirt-daemon-system
+    state: present
+    update_cache: true
+
+- name: Add user to libvirt group
+  ansible.builtin.user:
+    name: "{{ home_user }}"
+    groups: libvirt
+    append: true

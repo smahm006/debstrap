@@ -1,0 +1,17 @@
+---
+- name: Import vagrant.yml
+  become: true
+  ansible.builtin.import_tasks: vagrant.yml
+
+- name: Import docker.yml
+  become: true
+  ansible.builtin.import_tasks: docker.yml
+
+- name: Import golang.yml
+  ansible.builtin.import_tasks: golang.yml
+
+- name: Import zig.yml
+  ansible.builtin.import_tasks: zig.yml
+#
+- name: Import rust.yml
+  ansible.builtin.import_tasks: rust.yml

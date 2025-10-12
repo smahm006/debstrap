@@ -45,6 +45,7 @@ export GOROOT="$ARCHITECTURE/toolchains/go"
 export GOPATH="$GOROOT/bin"
 export CARGO_HOME="$ARCHITECTURE/toolchains/rust/.cargo"
 export RUSTUP_HOME="$ARCHITECTURE/toolchains/rust/.rustup"
+export ZIG_HOME="$ARCHITECTURE/toolchains/zig"
 
 # HSTR
 export HSTR_CONFIG="raw-history-view,hicolor"
@@ -57,4 +58,5 @@ export PATH="\
 $PATH:\
 $HOME/.local/cbin:\
 $GOBIN:\
-$CARGO_HOME/bin"
+$CARGO_HOME/bin:\
+$ZIG_HOME"

@@ -1,20 +1,38 @@
 ---
 - name: Import sway.yml
   ansible.builtin.import_tasks: sway.yml
+  tags:
+    - rice
+    - rice_sway
 
 - name: Import waybar.yml
   ansible.builtin.import_tasks: waybar.yml
+  tags:
+    - rice
+    - rice_waybar
 
 - name: Import clipboard.yml
   ansible.builtin.import_tasks: clipboard.yml
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Import fonts.yml
   ansible.builtin.import_tasks: fonts.yml
+  tags:
+    - rice
+    - rice_fonts
 
 - name: Import ly.yml
   ansible.builtin.import_tasks: ly.yml
   become: true
+  tags:
+    - rice
+    - rice_ly
 
 - name: Import keyd.yml
   ansible.builtin.import_tasks: keyd.yml
   become: true
+  tags:
+    - rice
+    - rice_keyd

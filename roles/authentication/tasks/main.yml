@@ -1,6 +1,12 @@
 ---
 - name: Import authentication setup tasks
   ansible.builtin.import_tasks: gpg.yml
+  tags:
+    - auth
+    - auth_gpg
 
 - name: Import SSH setup tasks
   ansible.builtin.import_tasks: ssh.yml
+  tags:
+    - auth
+    - auth_ssh

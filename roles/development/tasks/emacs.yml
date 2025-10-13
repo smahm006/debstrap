@@ -4,23 +4,36 @@
     url: https://ftp.gnu.org/gnu/emacs/
     return_content: true
   register: emacs_releases
+  tags:
+    - dev
+    - dev_emacs
 
 - name: Extract latest Emacs version
   ansible.builtin.set_fact:
     emacs_version: "{{ emacs_releases.content
                        | regex_findall('emacs-([0-9]+\\.[0-9]+)\\.tar\\.xz')
                        | sort(reverse=true) | first }}"
+  tags:
+    - dev
+    - dev_emacs
 
 - name: Download latest Emacs source
   ansible.builtin.get_url:
     url: "https://ftp.gnu.org/gnu/emacs/emacs-{{ emacs_version }}.tar.xz"
     dest: "/tmp/emacs-{{ emacs_version }}.tar.xz"
+    mode: '0644'
+  tags:
+    - dev
+    - dev_emacs
 
 - name: Extract Emacs source
   ansible.builtin.unarchive:
     src: "/tmp/emacs-{{ emacs_version }}.tar.xz"
     dest: /tmp
     remote_src: true
+  tags:
+    - dev
+    - dev_emacs
 
 - name: Build Emacs
   become: true
@@ -31,3 +44,7 @@
     make install
   args:
     chdir: "/tmp/emacs-{{ emacs_version }}"
+  changed_when: false
+  tags:
+    - dev
+    - dev_emacs

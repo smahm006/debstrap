@@ -4,15 +4,24 @@
     url: https://get.docker.com
     dest: /tmp/get-docker.sh
     mode: '0755'
+  tags:
+    - dev
+    - dev_docker
 
 - name: Run Docker install script
   ansible.builtin.command:
     cmd: sh /tmp/get-docker.sh
   register: command_result
   changed_when: "'command appears to already exist' not in command_result.stdout"
+  tags:
+    - dev
+    - dev_docker
 
 - name: Add user to docker group
   ansible.builtin.user:
     name: "{{ home_user }}"
     groups: docker
     append: true
+  tags:
+    - dev
+    - dev_docker

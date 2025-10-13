@@ -2,38 +2,84 @@
 - name: Import task base.yml
   ansible.builtin.import_tasks: base.yml
   become: true
+  tags:
+    - pkg
+    - pkg_base
+
 - name: Import task build.yml
   ansible.builtin.import_tasks: build.yml
   become: true
+  tags:
+    - pkg
+    - pkg_build
+
 - name: Import task network.yml
   ansible.builtin.import_tasks: network.yml
   become: true
+  tags:
+    - pkg
+    - pkg_network
+
 - name: Import task security.yml
   ansible.builtin.import_tasks: security.yml
   become: true
+  tags:
+    - pkg
+    - pkg_security
+
 - name: Import task power.yml
   ansible.builtin.import_tasks: power.yml
   become: true
+  tags:
+    - pkg
+    - pkg_power
+
 - name: Import task utility.yml
   ansible.builtin.import_tasks: utility.yml
   become: true
+  tags:
+    - pkg
+    - pkg_utility
+
 - name: Import task libs.yml
   ansible.builtin.import_tasks: libs.yml
   become: true
+  tags:
+    - pkg
+    - pkg_libs
+
 - name: Import task applications.yml
   ansible.builtin.import_tasks: applications.yml
   become: true
+  tags:
+    - pkg
+    - pkg_apps
+
 - name: Import task audio.yml
   ansible.builtin.import_tasks: audio.yml
   become: true
+  tags:
+    - pkg
+    - pkg_audio
+
 - name: Import task android.yml
   ansible.builtin.import_tasks: android.yml
   become: true
+  tags:
+    - pkg
+    - pkg_android
+
 - name: Import task firefox.yml
   ansible.builtin.import_tasks: firefox.yml
   become: true
+  tags:
+    - pkg
+    - pkg_firefox
+
 - name: Upgrade all packages to latest version
   ansible.builtin.apt:
     upgrade: full
     update_cache: true
   become: true
+  tags:
+    - pkg_upgrade

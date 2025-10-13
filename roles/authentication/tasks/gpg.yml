@@ -4,12 +4,18 @@
     path: "{{ user_home }}/.config/gnupg"
     state: directory
     mode: "0700"
+  tags:
+    - auth
+    - auth_gpg
 
 - name: Ensure correct permissions on GnuPG files
   ansible.builtin.find:
     paths: "{{ user_home }}/.config/gnupg"
     recurse: true
   register: gpg_files
+  tags:
+    - auth
+    - auth_gpg
 
 - name: Fix permissions for GnuPG files
   ansible.builtin.file:
@@ -18,6 +24,9 @@
   loop: "{{ gpg_files.files }}"
   loop_control:
     label: "{{ item.path }}"
+  tags:
+    - auth
+    - auth_gpg
 
 - name: Import Yubikey public GPG key
   ansible.builtin.command:
@@ -28,6 +37,9 @@
     GNUPGHOME: "{{ xdg_config_home }}//gnupg"
   register: gpg_import
   changed_when: "'imported' in gpg_import.stdout or 'unchanged' in gpg_import.stdout"
+  tags:
+    - auth
+    - auth_gpg
 
 - name: Refresh GPG smartcard keys
   ansible.builtin.command:
@@ -36,3 +48,6 @@
     GNUPGHOME: "{{ xdg_config_home }}/gnupg"
   register: gpg_card
   changed_when: false
+  tags:
+    - auth
+    - auth_gpg

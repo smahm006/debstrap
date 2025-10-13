@@ -11,4 +11,3 @@
 
 # Bashrc
 . "$HOME/.bashrc"
-. "/home/smahm/workstation/architecture/toolchains/rust/.cargo/env"

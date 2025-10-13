@@ -12,3 +12,6 @@
     - "{{ media_home }}/image/wallpaper"
     - "{{ media_home }}/image/screenshot"
     - "{{ media_home }}/image/misc"
+  tags:
+    - xdg
+    - xdg_media

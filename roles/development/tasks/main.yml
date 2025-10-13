@@ -1,28 +1,52 @@
 ---
 - name: Import emacs.yml
   ansible.builtin.import_tasks: emacs.yml
+  tags:
+    - dev
+    - dev_emacs
 
-# - name: Import vagrant.yml
-#   become: true
-#   ansible.builtin.import_tasks: vagrant.yml
-#
-# - name: Import docker.yml
-#   become: true
-#   ansible.builtin.import_tasks: docker.yml
-#
-# - name: Import golang.yml
-#   ansible.builtin.import_tasks: golang.yml
-#
-# - name: Import zig.yml
-#   ansible.builtin.import_tasks: zig.yml
-# #
-# - name: Import rust.yml
-#   ansible.builtin.import_tasks: rust.yml
-#
-# - name: Import cpp.yml
-#   become: true
-#   ansible.builtin.import_tasks: cpp.yml
-#
-# - name: Import node.yml
-#   become: true
-#   ansible.builtin.import_tasks: node.yml
+- name: Import vagrant.yml
+  become: true
+  ansible.builtin.import_tasks: vagrant.yml
+  tags:
+    - dev
+    - dev_vagrant
+
+- name: Import docker.yml
+  become: true
+  ansible.builtin.import_tasks: docker.yml
+  tags:
+    - dev
+    - dev_docker
+
+- name: Import golang.yml
+  ansible.builtin.import_tasks: golang.yml
+  tags:
+    - dev
+    - dev_go
+
+- name: Import zig.yml
+  ansible.builtin.import_tasks: zig.yml
+  tags:
+    - dev
+    - dev_zig
+
+- name: Import rust.yml
+  ansible.builtin.import_tasks: rust.yml
+  tags:
+    - dev
+    - dev_rust
+
+- name: Import cpp.yml
+  become: true
+  ansible.builtin.import_tasks: cpp.yml
+  tags:
+    - dev
+    - dev_cpp
+
+- name: Import node.yml
+  become: true
+  ansible.builtin.import_tasks: node.yml
+  tags:
+    - dev
+    - dev_node

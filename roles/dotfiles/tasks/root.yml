@@ -5,6 +5,9 @@
     file_type: file
     recurse: true
   register: root_dotfiles
+  tags:
+    - dot
+    - dot_root
 
 - name: Ensure parent directory exists for root dotfiles
   ansible.builtin.file:
@@ -14,6 +17,9 @@
     group: root
     mode: '0755'
   loop: "{{ root_dotfiles.files }}"
+  tags:
+    - dot
+    - dot_root
 
 - name: Ensure root dotfiles are copied
   ansible.builtin.copy:
@@ -24,3 +30,6 @@
     force: true
     mode: "{{ '0755' if item.path | regex_search('\\.sh$') else '0644' }}"
   loop: "{{ root_dotfiles.files }}"
+  tags:
+    - dot
+    - dot_root

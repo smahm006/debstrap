@@ -14,3 +14,6 @@
     state: present
     update_cache: true
     install_recommends: false
+  tags:
+    - pkg
+    - pkg_security

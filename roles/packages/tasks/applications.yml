@@ -11,9 +11,15 @@
       - sxiv
       - texinfo
       - thunar
+      - thunar-archive-plugin
+      - thunar-media-tags-plugin
+      - thunar-volman
       - vim
       - wine
       - zathura
     state: present
     update_cache: true
     install_recommends: false
+  tags:
+    - pkg
+    - pkg_apps

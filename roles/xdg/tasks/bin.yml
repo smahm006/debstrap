@@ -4,3 +4,6 @@
     path: "{{ xdg_bin_home }}"
     state: directory
     mode: '0755'
+  tags:
+    - xdg
+    - xdg_bin

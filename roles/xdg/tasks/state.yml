@@ -10,3 +10,6 @@
     - "{{ xdg_state_home }}/less"
     - "{{ xdg_state_home }}/python"
     - "{{ xdg_state_home }}/node"
+  tags:
+    - xdg
+    - xdg_state

@@ -8,3 +8,6 @@
     - "{{ xdg_cache_home }}"
     - "{{ xdg_cache_home }}/X11"
     - "{{ xdg_cache_home }}/python"
+  tags:
+    - xdg
+    - xdg_cache

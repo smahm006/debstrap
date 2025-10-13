@@ -11,3 +11,6 @@
     - "{{ org_home }}/books"
     - "{{ org_home }}/backup"
     - "{{ org_home }}/proffesional"
+  tags:
+    - xdg
+    - xdg_org

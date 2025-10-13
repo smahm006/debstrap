@@ -7,9 +7,15 @@
     state: present
     update_cache: true
     install_recommends: true
+  tags:
+    - dev
+    - dev_vagrant
 
 - name: Add user to libvirt group
   ansible.builtin.user:
     name: "{{ home_user }}"
     groups: libvirt
     append: true
+  tags:
+    - dev
+    - dev_vagrant

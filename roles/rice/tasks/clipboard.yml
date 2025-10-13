@@ -4,6 +4,9 @@
     url: https://api.github.com/repos/sentriz/cliphist/releases/latest
     return_content: true
   register: cliphist_release
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Download latest cliphist binary
   ansible.builtin.get_url:
@@ -13,18 +16,27 @@
               | first }}"
     dest: "{{ xdg_bin_home }}/cliphist"
     mode: '0755'
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Get latest tofi release info
   ansible.builtin.uri:
     url: https://api.github.com/repos/philj56/tofi/releases/latest
     return_content: true
   register: tofi_release
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Download tofi
   ansible.builtin.get_url:
     url: "{{ tofi_release.json.tarball_url }}"
     dest: "/tmp/tofi.zip"
     mode: '0755'
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Unarchive Tofi
   ansible.builtin.unarchive:
@@ -33,6 +45,9 @@
     remote_src: true
     list_files: true
   register: tofi_contents
+  tags:
+    - rice
+    - rice_clipboard
 
 - name: Build Tofi
   become: true
@@ -40,3 +55,6 @@
     cmd: "meson build && ninja -C build install"
     chdir: "/tmp/{{ tofi_contents.files[0] }}"
   changed_when: false
+  tags:
+    - rice
+    - rice_clipboard

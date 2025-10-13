@@ -3,16 +3,26 @@
   ansible.builtin.git:
     repo: https://codeberg.org/fairyglade/ly.git
     dest: /tmp/ly
+    version: master
     update: false
+  tags:
+    - rice
+    - rice_ly
 
 - name: Build ly using zig
   ansible.builtin.command:
     cmd: "{{ workstation_home }}/architecture/toolchains/zig/zig build"
     chdir: /tmp/ly
   changed_when: false
+  tags:
+    - rice
+    - rice_ly
 
 - name: Install ly with systemd init
   ansible.builtin.command:
     cmd: "{{ workstation_home }}/architecture/toolchains/zig/zig build installexe -Dinit_system=systemd"
     chdir: /tmp/ly
   changed_when: false
+  tags:
+    - rice
+    - rice_ly

@@ -94,3 +94,6 @@
     install_recommends: false
   ignore_errors: true
   register: ignore_errors_register
+  tags:
+    - pkg
+    - pkg_libs

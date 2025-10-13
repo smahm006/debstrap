@@ -14,18 +14,27 @@
     state: present
     update_cache: true
     install_recommends: true
+  tags:
+    - rice
+    - rice_sway
 
 - name: Get latest swaylock-effects release info
   ansible.builtin.uri:
     url: https://api.github.com/repos/mortie/swaylock-effects/releases
     return_content: true
   register: swaylock_effects_release
+  tags:
+    - rice
+    - rice_sway
 
 - name: Download latest swaylock-effects
   ansible.builtin.get_url:
     url: "https://github.com/mortie/swaylock-effects/archive/refs/tags/{{ swaylock_effects_release.json[0].tag_name }}.zip"
     dest: "/tmp/swaylock-effects.zip"
     mode: '0755'
+  tags:
+    - rice
+    - rice_sway
 
 - name: Unarchive swaylock-effects
   ansible.builtin.unarchive:
@@ -34,6 +43,9 @@
     remote_src: true
     list_files: true
   register: swaylock_effects_contents
+  tags:
+    - rice
+    - rice_sway
 
 - name: Build swaylock-effects
   become: true
@@ -41,3 +53,6 @@
     cmd: "meson build && ninja -C build install"
     chdir: "/tmp/{{ swaylock_effects_contents.files[0] }}"
   changed_when: false
+  tags:
+    - rice
+    - rice_sway

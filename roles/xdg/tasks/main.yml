@@ -1,23 +1,66 @@
 ---
 - name: Import task data.yml
   ansible.builtin.import_tasks: data.yml
+  tags:
+    - xdg
+    - xdg_data
+
 - name: Import task config.yml
   ansible.builtin.import_tasks: config.yml
+  tags:
+    - xdg
+    - xdg_config
+
 - name: Import task bin.yml
   ansible.builtin.import_tasks: bin.yml
+  tags:
+    - xdg
+    - xdg_bin
+
 - name: Import task cache.yml
   ansible.builtin.import_tasks: cache.yml
+  tags:
+    - xdg
+    - xdg_cache
+
 - name: Import task state.yml
   ansible.builtin.import_tasks: state.yml
+  tags:
+    - xdg
+    - xdg_state
+
 - name: Import task workstation.yml
   ansible.builtin.import_tasks: workstation.yml
+  tags:
+    - xdg
+    - xdg_workstation
+
 - name: Import task media.yml
   ansible.builtin.import_tasks: media.yml
+  tags:
+    - xdg
+    - xdg_media
+
 - name: Import task org.yml
   ansible.builtin.import_tasks: org.yml
+  tags:
+    - xdg
+    - xdg_org
+
 - name: Import task apps.yml
   ansible.builtin.import_tasks: apps.yml
+  tags:
+    - xdg
+    - xdg_apps
+
 - name: Import task ssh.yml
   ansible.builtin.import_tasks: ssh.yml
+  tags:
+    - xdg
+    - xdg_ssh
+
 - name: Import task delete.yml
   ansible.builtin.import_tasks: delete.yml
+  tags:
+    - xdg
+    - xdg_delete

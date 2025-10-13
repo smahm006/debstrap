@@ -15,3 +15,6 @@
     - "{{ xdg_data_home }}/themes"
     - "{{ xdg_data_home }}/terminfo"
     - "{{ xdg_data_home }}/.pki"
+  tags:
+    - xdg
+    - xdg_data

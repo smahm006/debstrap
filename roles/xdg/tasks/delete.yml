@@ -11,3 +11,6 @@
     - "{{ user_home }}/Music"
     - "{{ user_home }}/Templates"
     - "{{ user_home }}/Public"
+  tags:
+    - xdg
+    - xdg_delete

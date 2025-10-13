@@ -4,17 +4,27 @@
     url: "https://ziglang.org/download/0.15.1/zig-x86_64-linux-0.15.1.tar.xz"
     dest: /tmp/zig.tar.xz
     mode: '0644'
+  tags:
+    - dev
+    - dev_zig
 
 - name: Remove old Zig toolchain
   become: true
   ansible.builtin.file:
     path: "{{ workstation_home }}/architecture/toolchains/zig"
     state: absent
+  tags:
+    - dev
+    - dev_zig
 
 - name: Create new Zig toolchain directory
   ansible.builtin.file:
     path: "{{ workstation_home }}/architecture/toolchains/zig"
     state: directory
+    mode: '0755'
+  tags:
+    - dev
+    - dev_zig
 
 - name: Extract Zig
   ansible.builtin.unarchive:
@@ -24,3 +34,6 @@
       - --strip-components=1
       - --show-stored-names
     remote_src: true
+  tags:
+    - dev
+    - dev_zig

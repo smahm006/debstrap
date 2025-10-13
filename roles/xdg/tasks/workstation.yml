@@ -17,3 +17,6 @@
     - "{{ workstation_home }}/architecture/toolchains/rust"
     - "{{ workstation_home }}/architecture/virtualmachines"
     - "{{ workstation_home }}/architecture/virtualmachines/vagrant"
+  tags:
+    - xdg
+    - xdg_workstation

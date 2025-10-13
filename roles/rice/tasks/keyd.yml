@@ -3,16 +3,26 @@
   ansible.builtin.git:
     repo: https://github.com/rvaiya/keyd
     dest: /tmp/keyd
+    version: master
     update: false
+  tags:
+    - rice
+    - rice_keyd
 
 - name: Build and install keyd
   ansible.builtin.shell:
     cmd: make -j$(nproc) && make install
     chdir: /tmp/keyd
   changed_when: false
+  tags:
+    - rice
+    - rice_keyd
 
 - name: Enable and start keyd service
   ansible.builtin.systemd:
     name: keyd
     enabled: true
     state: started
+  tags:
+    - rice
+    - rice_keyd

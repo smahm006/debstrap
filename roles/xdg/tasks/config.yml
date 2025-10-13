@@ -21,3 +21,6 @@
     - "{{ xdg_config_home }}/aws"
     - "{{ xdg_config_home }}/python"
     - "{{ xdg_config_home }}/npm"
+  tags:
+    - xdg
+    - xdg_config

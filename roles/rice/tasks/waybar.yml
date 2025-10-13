@@ -4,12 +4,18 @@
     url: https://api.github.com/repos/alexays/waybar/releases
     return_content: true
   register: waybar_release
+  tags:
+    - rice
+    - rice_waybar
 
 - name: Download latest waybar
   ansible.builtin.get_url:
     url: "https://github.com/alexays/waybar/archive/refs/tags/{{ waybar_release.json[0].tag_name }}.zip"
     dest: "/tmp/waybar.zip"
     mode: '0755'
+  tags:
+    - rice
+    - rice_waybar
 
 - name: Unarchive waybar
   ansible.builtin.unarchive:
@@ -18,6 +24,9 @@
     remote_src: true
     list_files: true
   register: waybar_contents
+  tags:
+    - rice
+    - rice_waybar
 
 - name: Build waybar
   become: true
@@ -25,3 +34,6 @@
     cmd: "meson build && ninja -C build install"
     chdir: "/tmp/{{ waybar_contents.files[0] }}"
   changed_when: false
+  tags:
+    - rice
+    - rice_waybar

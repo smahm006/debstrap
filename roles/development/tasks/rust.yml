@@ -4,12 +4,18 @@
     path: "{{ workstation_home }}/architecture/toolchains/rust"
     state: directory
     mode: '0755'
+  tags:
+    - dev
+    - dev_rust
 
 - name: Download Rustup install script
   ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: /tmp/rustup-init.sh
     mode: '0755'
+  tags:
+    - dev
+    - dev_rust
 
 - name: Install Rustup
   ansible.builtin.command:
@@ -19,6 +25,9 @@
     RUSTUP_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.rustup"
   args:
     creates: "{{ workstation_home }}/architecture/toolchains/rust/.cargo/bin/rustc"
+  tags:
+    - dev
+    - dev_rust
 
 - name: Add rust-src component
   ansible.builtin.command:
@@ -28,3 +37,6 @@
   environment:
     CARGO_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.cargo"
     RUSTUP_HOME: "{{ workstation_home }}/architecture/toolchains/rust/.rustup"
+  tags:
+    - dev
+    - dev_rust

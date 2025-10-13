@@ -1,7 +1,13 @@
 ---
 - name: Import task home.yml
   ansible.builtin.import_tasks: home.yml
+  tags:
+    - dot
+    - dot_home
 
 - name: Import task root.yml
   become: true
   ansible.builtin.import_tasks: root.yml
+  tags:
+    - dot
+    - dot_root

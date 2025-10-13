@@ -3,23 +3,33 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/files/home"
     file_type: file
+    hidden: true
     recurse: true
   register: home_dotfiles
+  tags:
+    - dot
+    - dot_home
 
 - name: Ensure parent directory exists for home dotfiles
   become: true
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '')  | dirname }}"
+    path: "{{ user_home }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '')  | dirname }}"
     state: directory
     owner: "{{ home_user }}"
     group: "{{ home_user }}"
     mode: '0755'
   loop: "{{ home_dotfiles.files }}"
+  tags:
+    - dot
+    - dot_home
 
 - name: Ensure home dotfiles are symlinked
   ansible.builtin.file:
     src: "{{ item.path }}"
-    dest: "{{ ansible_env.HOME }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '') }}"
+    dest: "{{ user_home }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '') }}"
     state: link
     force: true
   loop: "{{ home_dotfiles.files }}"
+  tags:
+    - dot
+    - dot_home

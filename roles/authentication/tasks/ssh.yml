@@ -4,12 +4,18 @@
     path: "{{ user_home }}/.ssh"
     state: directory
     mode: "0700"
+  tags:
+    - auth
+    - auth_ssh
 
 - name: Ensure correct permissions on SSH files
   ansible.builtin.find:
     paths: "{{ user_home }}/.ssh"
     recurse: true
   register: ssh_files
+  tags:
+    - auth
+    - auth_ssh
 
 - name: Fix permissions for SSH files
   ansible.builtin.file:
@@ -23,3 +29,6 @@
       {{ '0700' if item.isdir else '0600' }}
       {% endif %}
   loop: "{{ ssh_files.files }}"
+  tags:
+    - auth
+    - auth_ssh

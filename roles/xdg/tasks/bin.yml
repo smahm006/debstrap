@@ -1,0 +1,6 @@
+---
+- name: Create XDG bin directory
+  ansible.builtin.file:
+    path: "{{ xdg_bin_home }}"
+    state: directory
+    mode: '0755'

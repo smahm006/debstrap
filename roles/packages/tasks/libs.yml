@@ -1,12 +1,26 @@
 ---
+- name: Detect GCC version
+  ansible.builtin.command:
+    cmd: gcc -dumpversion
+  register: gcc_version
+  changed_when: false
+
+- name: Extract GCC major version
+  ansible.builtin.set_fact:
+    gcc_major_version: "{{ gcc_version.stdout.split('.')[0] }}"
+
 - name: Install development libraries
   ansible.builtin.apt:
     name:
+      - "libgcc-{{ gcc_major_version }}-dev"
+      - "libgccjit-{{ gcc_major_version }}-dev"
+      - gobject-introspection
       - lbzip2
       - libacl1-dev
       - libasound2-dev
       - libassuan-dev
       - libc6-dev
+      - libcatch2-dev
       - libdatrie-dev
       - libdbus-1-dev
       - libdbusmenu-gtk3-dev
@@ -30,6 +44,7 @@
       - libm17n-dev
       - libmagick++-dev
       - libmagickwand-dev
+      - libmagickwand-dev
       - libmpdclient-dev
       - libncurses-dev
       - libncurses5-dev
@@ -51,6 +66,7 @@
       - libtiff5-dev
       - libtinfo-dev
       - libtool
+      - libtree-sitter-dev
       - libwayland-dev
       - libx11-dev
       - libxaw7-dev

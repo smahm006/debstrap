@@ -1,5 +1,5 @@
 ---
-- name: Link user dotfiles
+- name: Get user dotfiles
   ansible.builtin.find:
     paths: "{{ role_path }}/files/home"
     file_type: file

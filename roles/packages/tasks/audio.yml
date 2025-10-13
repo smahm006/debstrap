@@ -4,6 +4,7 @@
     name:
       - pipewire-pulse
       - wireplumber
+      - pulseaudio-utils
     state: present
     update_cache: true
     install_recommends: true

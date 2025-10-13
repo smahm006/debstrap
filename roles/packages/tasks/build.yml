@@ -5,9 +5,12 @@
       - automake
       - autotools-dev
       - cmake
+      - gcc
       - make
       - meson
       - ninja-build
+      - scdoc
+      - texinfo
     state: present
     update_cache: true
     install_recommends: true

@@ -4,6 +4,7 @@
     name:
       - acpi
       - tlp
+      - upower
     state: present
     update_cache: true
     install_recommends: true

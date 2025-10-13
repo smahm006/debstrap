@@ -1,0 +1,33 @@
+---
+- name: Get list of Emacs releases
+  ansible.builtin.uri:
+    url: https://ftp.gnu.org/gnu/emacs/
+    return_content: true
+  register: emacs_releases
+
+- name: Extract latest Emacs version
+  ansible.builtin.set_fact:
+    emacs_version: "{{ emacs_releases.content
+                       | regex_findall('emacs-([0-9]+\\.[0-9]+)\\.tar\\.xz')
+                       | sort(reverse=true) | first }}"
+
+- name: Download latest Emacs source
+  ansible.builtin.get_url:
+    url: "https://ftp.gnu.org/gnu/emacs/emacs-{{ emacs_version }}.tar.xz"
+    dest: "/tmp/emacs-{{ emacs_version }}.tar.xz"
+
+- name: Extract Emacs source
+  ansible.builtin.unarchive:
+    src: "/tmp/emacs-{{ emacs_version }}.tar.xz"
+    dest: /tmp
+    remote_src: true
+
+- name: Build Emacs
+  become: true
+  ansible.builtin.shell: |
+    ./autogen.sh
+    ./configure --with-native-compilation --without-ns --without-x --with-pgtk --with-tree-sitter --with-imagemagick
+    make -j$(nproc)
+    make install
+  args:
+    chdir: "/tmp/emacs-{{ emacs_version }}"

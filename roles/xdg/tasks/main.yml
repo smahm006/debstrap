@@ -3,6 +3,8 @@
   ansible.builtin.import_tasks: data.yml
 - name: Import task config.yml
   ansible.builtin.import_tasks: config.yml
+- name: Import task bin.yml
+  ansible.builtin.import_tasks: bin.yml
 - name: Import task cache.yml
   ansible.builtin.import_tasks: cache.yml
 - name: Import task state.yml

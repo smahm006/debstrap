@@ -7,8 +7,10 @@
       - gparted
       - libreoffice-base
       - qbittorrent
+      - redshift-gtk
       - sxiv
       - texinfo
+      - thunar
       - vim
       - wine
       - zathura

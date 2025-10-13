@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - bc
+      - brightnessctl
       - desktop-file-utils
       - ethtool
       - fd-find
@@ -20,7 +21,6 @@
       - parallel
       - parted
       - pinentry-tty
-      - redshift-gtk
       - ripgrep
       - scdaemon
       - scdoc

@@ -1,0 +1,10 @@
+---
+- name: Install clang packages
+  ansible.builtin.apt:
+    name:
+      - clang
+      - clang-tidy
+      - clang-tools
+    state: present
+    update_cache: true
+    install_recommends: false

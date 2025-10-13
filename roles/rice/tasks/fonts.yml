@@ -9,7 +9,7 @@
 
 - name: Download Maple Mono font
   ansible.builtin.get_url:
-    url: https://github.com/subframe7536/Maple-font/releases/latest/download/MapleMono-ttf.zip
+    url: https://github.com/subframe7536/Maple-font/releases/latest/download/MapleMonoNormal-TTF.zip
     dest: /tmp/MapleMono.zip
     mode: '0644'
 

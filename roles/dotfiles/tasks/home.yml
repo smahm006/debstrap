@@ -6,6 +6,16 @@
     recurse: true
   register: home_dotfiles
 
+- name: Ensure parent directory exists for home dotfiles
+  become: true
+  ansible.builtin.file:
+    path: "/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '') | dirname }}"
+    state: directory
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0755'
+  loop: "{{ home_dotfiles.files }}"
+
 - name: Ensure home dotfiles are symlinked
   ansible.builtin.file:
     src: "{{ item.path }}"

@@ -13,6 +13,15 @@
     group: root
   loop: "{{ root_dotfiles.files }}"
 
+- name: Ensure parent directory exists for root dotfiles
+  ansible.builtin.file:
+    path: "/{{ item.path | regex_replace('^' + (role_path ~ '/files/root/') , '') | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop: "{{ root_dotfiles.files }}"
+
 - name: Ensure root dotfiles are symlinked
   ansible.builtin.file:
     src: "{{ item.path }}"

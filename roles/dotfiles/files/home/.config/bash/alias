@@ -12,6 +12,7 @@ alias mkdir="mkdir -p"
 alias tr="trash"
 alias hh="hstr"
 alias ssh="TERM=xterm-color ssh"
+alias octal="stat -c '%a'"
 
 # Text
 alias ls="ls --color=auto"

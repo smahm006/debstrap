@@ -3,9 +3,9 @@
   vars:
     machine_type: "laptop"
   roles:
-    - role: xdg
+    # - role: xdg
     - role: dotfiles
-    - role: packages
-    - role: authentication
-    - role: development
-    - role: rice
+    # - role: packages
+    # - role: authentication
+    # - role: development
+    # - role: rice

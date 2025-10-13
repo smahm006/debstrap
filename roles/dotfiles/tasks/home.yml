@@ -9,7 +9,7 @@
 - name: Ensure parent directory exists for home dotfiles
   become: true
   ansible.builtin.file:
-    path: "/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '') | dirname }}"
+    path: "{{ ansible_env.HOME }}/{{ item.path | regex_replace('^' + (role_path ~ '/files/home/') , '')  | dirname }}"
     state: directory
     owner: "{{ home_user }}"
     group: "{{ home_user }}"

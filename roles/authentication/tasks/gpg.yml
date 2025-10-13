@@ -1,13 +1,13 @@
 ---
 - name: Ensure GnuPG config directory exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.config/gnupg"
+    path: "{{ user_home }}/.config/gnupg"
     state: directory
     mode: "0700"
 
 - name: Ensure correct permissions on GnuPG files
   ansible.builtin.find:
-    paths: "{{ ansible_env.HOME }}/.config/gnupg"
+    paths: "{{ user_home }}/.config/gnupg"
     recurse: true
   register: gpg_files
 

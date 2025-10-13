@@ -1,0 +1,49 @@
+---
+- name: Install noto fonts package
+  become: true
+  ansible.builtin.apt:
+    name: fonts-noto
+    state: present
+    update_cache: true
+    install_recommends: true
+
+- name: Download Maple Mono font
+  ansible.builtin.get_url:
+    url: https://github.com/subframe7536/Maple-font/releases/latest/download/MapleMono-ttf.zip
+    dest: /tmp/MapleMono.zip
+    mode: '0644'
+
+- name: Ensure Maple Mono directory exists
+  ansible.builtin.file:
+    path: "{{ xdg_data_home }}/fonts/MapleMono"
+    state: directory
+    mode: '0755'
+
+- name: Unarchive Maple Mono font
+  ansible.builtin.unarchive:
+    src: /tmp/MapleMono.zip
+    dest: "{{ xdg_data_home }}/fonts/MapleMono"
+    remote_src: true
+
+- name: Download Nerd Font Symbols Only
+  ansible.builtin.get_url:
+    url: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip
+    dest: /tmp/NerdFontsSymbolsOnly.zip
+    mode: '0644'
+
+- name: Ensure Maple Mono directory exists
+  ansible.builtin.file:
+    path: "{{ xdg_data_home }}/fonts/NerdFontsSymbolsOnly"
+    state: directory
+    mode: '0755'
+
+- name: Unarchive Nerd Font Symbols Only
+  ansible.builtin.unarchive:
+    src: /tmp/NerdFontsSymbolsOnly.zip
+    dest: "{{ xdg_data_home }}/fonts/NerdFontsSymbolsOnly"
+    remote_src: true
+
+- name: Refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f -v
+  changed_when: false

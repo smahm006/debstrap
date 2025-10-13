@@ -1,0 +1,43 @@
+---
+- name: Install sway and related packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - sway
+      - sway-notification-center
+      - wl-clipboard
+      - grim
+      - grimshot
+      - foot
+      - swayidle
+      - wayland-protocols
+    state: present
+    update_cache: true
+    install_recommends: true
+
+- name: Get latest swaylock-effects release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/mortie/swaylock-effects/releases
+    return_content: true
+  register: swaylock_effects_release
+
+- name: Download latest swaylock-effects
+  ansible.builtin.get_url:
+    url: "https://github.com/mortie/swaylock-effects/archive/refs/tags/{{ swaylock_effects_release.json[0].tag_name }}.zip"
+    dest: "/tmp/swaylock-effects.zip"
+    mode: '0755'
+
+- name: Unarchive swaylock-effects
+  ansible.builtin.unarchive:
+    src: "/tmp/swaylock-effects.zip"
+    dest: "/tmp"
+    remote_src: true
+    list_files: true
+  register: swaylock_effects_contents
+
+- name: Build swaylock-effects
+  become: true
+  ansible.builtin.shell:
+    cmd: "meson build && ninja -C build install"
+    chdir: "/tmp/{{ swaylock_effects_contents.files[0] }}"
+  changed_when: false

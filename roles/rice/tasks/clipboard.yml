@@ -1,0 +1,42 @@
+---
+- name: Get latest cliphist release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/sentriz/cliphist/releases/latest
+    return_content: true
+  register: cliphist_release
+
+- name: Download latest cliphist binary
+  ansible.builtin.get_url:
+    url: "{{ cliphist_release.json.assets
+              | selectattr('name', 'search', 'linux-amd64')
+              | map(attribute='browser_download_url')
+              | first }}"
+    dest: "{{ xdg_bin_home }}/cliphist"
+    mode: '0755'
+
+- name: Get latest tofi release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/philj56/tofi/releases/latest
+    return_content: true
+  register: tofi_release
+
+- name: Download tofi
+  ansible.builtin.get_url:
+    url: "{{ tofi_release.json.tarball_url }}"
+    dest: "/tmp/tofi.zip"
+    mode: '0755'
+
+- name: Unarchive Tofi
+  ansible.builtin.unarchive:
+    src: /tmp/tofi.zip
+    dest: "/tmp"
+    remote_src: true
+    list_files: true
+  register: tofi_contents
+
+- name: Build Tofi
+  become: true
+  ansible.builtin.shell:
+    cmd: "meson build && ninja -C build install"
+    chdir: "/tmp/{{ tofi_contents.files[0] }}"
+  changed_when: false

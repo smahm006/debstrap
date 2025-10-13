@@ -1,0 +1,20 @@
+---
+- name: Import sway.yml
+  ansible.builtin.import_tasks: sway.yml
+
+- name: Import waybar.yml
+  ansible.builtin.import_tasks: waybar.yml
+
+- name: Import clipboard.yml
+  ansible.builtin.import_tasks: clipboard.yml
+
+- name: Import fonts.yml
+  ansible.builtin.import_tasks: fonts.yml
+
+- name: Import ly.yml
+  ansible.builtin.import_tasks: ly.yml
+  become: true
+
+- name: Import keyd.yml
+  ansible.builtin.import_tasks: keyd.yml
+  become: true

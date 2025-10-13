@@ -1,0 +1,27 @@
+---
+- name: Get latest waybar release info
+  ansible.builtin.uri:
+    url: https://api.github.com/repos/alexays/waybar/releases
+    return_content: true
+  register: waybar_release
+
+- name: Download latest waybar
+  ansible.builtin.get_url:
+    url: "https://github.com/alexays/waybar/archive/refs/tags/{{ waybar_release.json[0].tag_name }}.zip"
+    dest: "/tmp/waybar.zip"
+    mode: '0755'
+
+- name: Unarchive waybar
+  ansible.builtin.unarchive:
+    src: "/tmp/waybar.zip"
+    dest: "/tmp"
+    remote_src: true
+    list_files: true
+  register: waybar_contents
+
+- name: Build waybar
+  become: true
+  ansible.builtin.shell:
+    cmd: "meson build && ninja -C build install"
+    chdir: "/tmp/{{ waybar_contents.files[0] }}"
+  changed_when: false

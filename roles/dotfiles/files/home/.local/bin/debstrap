@@ -105,7 +105,7 @@ debstrap() {
     cd ${ANSIBLE_DIR}
 
     # build command
-    local cmd="ansible-playbook -K playbooks/${MACHINE_TYPE}.yml"
+    local cmd="ansible-playbook -v -K playbooks/${MACHINE_TYPE}.yml"
     [[ ${#tags[@]} -gt 0 ]] && cmd+=" --tags $(IFS=,; echo "${tags[*]}")"
     [[ ${#skip_tags[@]} -gt 0 ]] && cmd+=" --skip-tags $(IFS=,; echo "${skip_tags[*]}")"
 

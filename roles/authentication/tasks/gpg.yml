@@ -31,12 +31,10 @@
 - name: Import Yubikey public GPG key
   ansible.builtin.command:
     cmd: "gpg --import {{ role_path }}/files/yubikey_public.asc"
-  args:
-    creates: "{{ xdg_config_home }}/gnupg/pubring.kbx"
   environment:
-    GNUPGHOME: "{{ xdg_config_home }}//gnupg"
+    GNUPGHOME: "{{ xdg_config_home }}/gnupg"
   register: gpg_import
-  changed_when: "'imported' in gpg_import.stdout or 'unchanged' in gpg_import.stdout"
+  changed_when: "'imported' in gpg_import.stderr or 'unchanged' not in gpg_import.stderr"
   tags:
     - auth
     - auth_gpg

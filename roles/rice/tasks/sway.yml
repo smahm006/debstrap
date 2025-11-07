@@ -56,3 +56,33 @@
   tags:
     - rice
     - rice_sway
+
+- name: Download chayang
+  ansible.builtin.get_url:
+    url: "https://gitlab.freedesktop.org/emersion/chayang/-/archive/v0.1.0/chayang-v0.1.0.zip"
+    dest: "/tmp/chayang.zip"
+    mode: '0755'
+  tags:
+    - rice
+    - rice_sway
+
+- name: Unarchive chayang
+  ansible.builtin.unarchive:
+    src: "/tmp/chayang.zip"
+    dest: "/tmp"
+    remote_src: true
+    list_files: true
+  register: chayang_contents
+  tags:
+    - rice
+    - rice_sway
+
+- name: Build chayang
+  become: true
+  ansible.builtin.shell:
+    cmd: "meson build && ninja -C build install"
+    chdir: "/tmp/{{ chayang_contents.files[0] }}"
+  changed_when: false
+  tags:
+    - rice
+    - rice_sway

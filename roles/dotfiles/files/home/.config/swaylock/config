@@ -1,4 +1,3 @@
-image=~/media/image/wallpaper/currentwallpaper.jpg
 daemonize
 show-failed-attempts
 ignore-empty-password

@@ -1,0 +1,14 @@
+---
+- name: Enable dark mode for GTK applications
+  ansible.builtin.blockinfile:
+    path: "{{ xdg_config_home }}/gtk-3.0/settings.ini"
+    create: true
+    block: |
+      [Settings]
+      gtk-application-prefer-dark-theme=1
+    marker_begin: "BEGIN CUSTOM CONFIGURATION"
+    marker_end: "END CUSTOM CONFIGURATION"
+    state: present
+  tags:
+    - rice
+    - rice_theme

@@ -23,6 +23,12 @@
     - rice
     - rice_fonts
 
+- name: Import theme.yml
+  ansible.builtin.import_tasks: theme.yml
+  tags:
+    - rice
+    - rice_theme
+
 - name: Import ly.yml
   ansible.builtin.import_tasks: ly.yml
   become: true

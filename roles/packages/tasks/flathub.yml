@@ -1,0 +1,71 @@
+---
+- name: Install flatpak
+  become: true
+  ansible.builtin.apt:
+    name:
+      - flatpak
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Add the Flathub repository
+  become: true
+  ansible.builtin.command: flatpak remote-add flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  register: flatpak_out
+  failed_when: "'already exists' not in flatpak_out.stderr"
+  changed_when: "'already exists' not in flatpak_out.stderr"
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Pause for request to reboot
+  when: "'already exists' not in flatpak_out.stderr"
+  ansible.builtin.pause:
+    seconds: 30
+    prompt: "Please continue to reboot your machine to finish flatpak installation"
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Rebooting the host in 10 seconds...
+  become: true
+  when: "'already exists' not in flatpak_out.stderr"
+  ansible.builtin.shell:
+    cmd: "sleep 10 && reboot"
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Add Fastmail Flathub
+  ansible.builtin.command: flatpak install --noninteractive flathub com.fastmail.Fastmail
+  register: flatpak_out
+  changed_when: "'already installed' not in flatpak_out.stderr"
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Add Biwarden Flathub
+  ansible.builtin.command: flatpak install --noninteractive flathub com.bitwarden.desktop
+  register: flatpak_out
+  changed_when: "'already installed' not in flatpak_out.stderr"
+  tags:
+    - pkg
+    - pkg_flathub
+
+- name: Find all flathub .desktop files
+  become: true
+  ansible.builtin.find:
+    paths: /var/lib/flatpak/exports/share/applications/
+    patterns: "*.desktop"
+    file_type: link
+  register: desktop_files
+
+- name: Add Wayland flags before and after Flatpak app ID
+  become: true
+  ansible.builtin.replace:
+    path: "{{ item.path }}"
+    regexp: '^(Exec=.*flatpak run\s+(?:-[^\s]+\s+)*)([^\s]+)(.*)$'
+    replace: '\1--socket=wayland \2 -ozone-platform-hint=auto --enable-features=WaylandWindowDecorations\3'
+    backup: true
+  loop: "{{ desktop_files.files }}"
+  when: item.path is file

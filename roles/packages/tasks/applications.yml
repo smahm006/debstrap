@@ -3,7 +3,6 @@
   ansible.builtin.apt:
     name:
       - blueman
-      - flatpak
       - gparted
       - libreoffice-base
       - qbittorrent

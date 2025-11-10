@@ -1,5 +1,6 @@
 - name: Configure my laptop
-  hosts: all
+  hosts: localhost
+  connection: local
   vars:
     machine_type: "laptop"
   roles:

@@ -76,6 +76,12 @@
     - pkg
     - pkg_firefox
 
+- name: Import task flathub.yml
+  ansible.builtin.import_tasks: flathub.yml
+  tags:
+    - pkg
+    - pkg_flathub
+
 - name: Upgrade all packages to latest version
   ansible.builtin.apt:
     upgrade: full

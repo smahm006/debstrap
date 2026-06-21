@@ -1,0 +1,17 @@
+---
+- name: Update user-dirs to new home directories
+  ansible.builtin.command: >
+    xdg-user-dirs-update --set {{ item.key }} "{{ item.value }}"
+  register: xdg_result
+  changed_when: true
+  loop:
+    - { key: 'DOCUMENTS', value: '$HOME/org/inbox' }
+    - { key: 'DOWNLOAD', value: '$HOME/dump' }
+    - { key: 'TEMPLATES', value: '$HOME/inbox' }
+    - { key: 'DESKTOP', value: '$HOME/inbox' }
+    - { key: 'MUSIC', value: '$HOME/media/audio' }
+    - { key: 'PICTURES', value: '$HOME/media/images' }
+    - { key: 'VIDEOS', value: '$HOME/media/videos' }
+  tags:
+    - xdg
+    - xdg_user_dirs

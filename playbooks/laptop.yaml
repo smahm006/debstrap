@@ -1,0 +1,12 @@
+---
+- name: Provision laptop
+  hosts: sm-laptop
+  connection: local
+  roles:
+    - role: xdg
+    - role: dotfiles
+    - role: packages
+    - role: authentication
+    - role: development
+    - role: virtual
+    - role: rice

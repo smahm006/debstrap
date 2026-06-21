@@ -1,0 +1,34 @@
+---
+- ansible.builtin.import_tasks: docker.yaml
+  become: true
+  tags:
+    - virt
+    - virt_docker
+
+- ansible.builtin.import_tasks: vagrant.yaml
+  become: true
+  when: inventory_hostname in groups['clients']
+  tags:
+    - virt
+    - virt_vagrant
+
+- name: Install kubectl
+  ansible.builtin.import_tasks: kubectl.yaml
+  tags:
+    - virt
+    - virt_k8s
+
+- name: Install k3s
+  become: true
+  ansible.builtin.import_tasks: k3s.yaml
+  when: inventory_hostname == 'sm-server'
+  tags:
+    - virt
+    - virt_k8s
+
+- name: Fetch kubeconfig
+  ansible.builtin.import_tasks: kubeconfig.yaml
+  when: inventory_hostname in groups['clients']
+  tags:
+    - virt
+    - virt_k8s

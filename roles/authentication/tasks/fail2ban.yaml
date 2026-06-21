@@ -1,0 +1,8 @@
+- name: Start fail2ban service and ensure it is enabled
+  ansible.builtin.systemd:
+    name:    fail2ban
+    state:   start
+    enabled: true
+  tags:
+    - auth
+    - auth_fail2ban

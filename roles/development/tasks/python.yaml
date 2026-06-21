@@ -1,0 +1,46 @@
+---
+- name: Install Python dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - python3-pip
+      - python3-venv
+      - python3-full
+    state: present
+  tags:
+    - dev
+    - dev_python
+
+- name: Install uv
+  ansible.builtin.shell:
+    cmd: curl -LsSf https://astral.sh/uv/install.sh | sh
+    creates: "{{ xdg_bin_home }}/uv"
+  tags:
+    - dev
+    - dev_python
+
+- name: Install ruff
+  ansible.builtin.command:
+    cmd: "{{ xdg_bin_home }}/uv tool install --upgrade ruff"
+  when: inventory_hostname in groups['clients']
+  register: ruff_result
+  changed_when: false
+  failed_when:
+    - ruff_result.rc != 0
+    - "'already exists' not in ruff_result.stderr"
+  tags:
+    - dev
+    - dev_python
+
+- name: Install ty
+  ansible.builtin.command:
+    cmd: "{{ xdg_bin_home }}/uv tool install --upgrade ty"
+  when: inventory_hostname in groups['clients']
+  register: ty_result
+  changed_when: false
+  failed_when:
+    - ty_result.rc != 0
+    - "'already exists' not in ty_result.stderr"
+  tags:
+    - dev
+    - dev_python

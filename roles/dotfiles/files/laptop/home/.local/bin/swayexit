@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+case "$1" in
+  lock)
+    TEMP_FILE=$(mktemp --suffix=.png)
+    grim -t png - | ffmpeg -loglevel quiet -y -i - -vf "gblur=sigma=10" "$TEMP_FILE"
+    chayang && swaylock -i "$TEMP_FILE"
+    rm "$TEMP_FILE"
+    ;;
+  suspend)   swaylock && systemctl suspend   ;;
+  hibernate) swaylock && systemctl hibernate ;;
+  reboot)    systemctl reboot                ;;
+  shutdown)  systemctl poweroff              ;;
+  logout)    sway exit                       ;;
+  *)
+    echo "Usage: $0 {lock|logout|suspend|hibernate|reboot|shutdown}"
+    exit 2
+    ;;
+esac

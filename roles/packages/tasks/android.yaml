@@ -1,0 +1,13 @@
+---
+- name: Install client specific android tools
+  ansible.builtin.apt:
+    name:
+      - adb
+      - fastboot
+      - heimdall-flash
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_android

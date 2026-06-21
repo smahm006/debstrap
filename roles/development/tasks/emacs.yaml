@@ -1,0 +1,105 @@
+---
+- name: Detect GCC version
+  ansible.builtin.command:
+    cmd: gcc -dumpversion
+  register: gcc_version
+  changed_when: false
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Set GCC major version fact
+  ansible.builtin.set_fact:
+    gcc_major_version: "{{ gcc_version.stdout.split('.')[0] }}"
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Install Emacs build dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - "libgcc-{{ gcc_major_version }}-dev"
+      - "libgccjit-{{ gcc_major_version }}-dev"
+      - libacl1-dev
+      - libc6-dev
+      - libgnutls28-dev
+      - libgpm-dev
+      - libgtk-3-dev
+      - libjpeg-dev
+      - libncurses-dev
+      - libnotify-dev
+      - libpng-dev
+      - librsvg2-dev
+      - libsqlite3-dev
+      - libtiff-dev
+      - libtree-sitter-dev
+      - libx11-dev
+      - libxml2-dev
+      - libmagickwand-dev
+    state: present
+    update_cache: true
+    install_recommends: false
+  ignore_errors: true
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Get latest Emacs version
+  ansible.builtin.uri:
+    url: https://ftp.gnu.org/gnu/emacs/
+    return_content: true
+  register: emacs_releases
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Extract latest Emacs version
+  ansible.builtin.set_fact:
+    emacs_version: "{{ emacs_releases.content
+                       | regex_findall('emacs-([0-9]+\\.[0-9]+)\\.tar\\.xz')
+                       | sort(reverse=true) | first }}"
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Download latest Emacs source
+  ansible.builtin.get_url:
+    url:  "https://ftp.gnu.org/gnu/emacs/emacs-{{ emacs_version }}.tar.xz"
+    dest: "/tmp/emacs-{{ emacs_version }}.tar.xz"
+    mode: '0644'
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Extract Emacs source
+  ansible.builtin.unarchive:
+    src:        "/tmp/emacs-{{ emacs_version }}.tar.xz"
+    dest:       /tmp
+    remote_src: true
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Build Emacs
+  ansible.builtin.shell: |
+    ./autogen.sh
+    ./configure --with-native-compilation --without-ns --without-x \
+                --with-pgtk --with-tree-sitter --with-imagemagick
+    make -j$(nproc)
+  args:
+    chdir: "/tmp/emacs-{{ emacs_version }}"
+  changed_when: false
+  tags:
+    - dev
+    - dev_emacs
+
+- name: Install Emacs
+  become: true
+  ansible.builtin.shell:
+    cmd: make install
+    chdir: "/tmp/emacs-{{ emacs_version }}"
+  changed_when: false
+  tags:
+    - dev
+    - dev_emacs

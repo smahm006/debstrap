@@ -1,0 +1,11 @@
+---
+- name: Provision server
+  hosts: sm-server
+  roles:
+    - role: xdg
+    - role: dotfiles
+    - role: packages
+    - role: authentication
+    - role: development
+    - role: virtual
+    - role: cluster

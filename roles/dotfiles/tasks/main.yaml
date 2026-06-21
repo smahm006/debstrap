@@ -1,0 +1,13 @@
+---
+- name: Deploy home dotfiles
+  ansible.builtin.import_tasks: home.yaml
+  tags:
+    - dot
+    - dot_home
+
+- name: Deploy root dotfiles
+  become: true
+  ansible.builtin.import_tasks: root.yaml
+  tags:
+    - dot
+    - dot_root

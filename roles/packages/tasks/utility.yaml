@@ -1,0 +1,60 @@
+---
+- name: Install utility packages
+  ansible.builtin.apt:
+    name:
+      - bc
+      - ethtool
+      - fd-find
+      - fzf
+      - gzip
+      - hstr
+      - jq
+      - mediainfo
+      - nano
+      - ncdu
+      - nvme-cli
+      - p7zip
+      - parallel
+      - parted
+      - ripgrep
+      - scdaemon
+      - scdoc
+      - screen
+      - trash-cli
+      - tree
+      - udevil
+      - unrar-free
+      - usbutils
+      - xdg-user-dirs
+      - xdg-user-dirs-gtk
+      - xdg-utils
+      - yq
+      - zip
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_utility
+
+
+- name: Install laptop specific utility packages
+  ansible.builtin.apt:
+    name:
+      - brightnessctl
+    state: present
+    install_recommends: false
+  when: machine_type == 'laptop'
+  tags:
+    - pkg
+    - pkg_utility
+
+- name: Install desktop specific utility packages
+  ansible.builtin.apt:
+    name:
+      - desktop-file-utils
+    state: present
+    install_recommends: false
+  when: machine_type == 'desktop'
+  tags:
+    - pkg
+    - pkg_utility

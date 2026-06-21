@@ -1,0 +1,131 @@
+#!/usr/bin/env bash
+# debstrap — run Ansible playbooks for the current (or target) machine
+
+# ── Find the debstrap repo root ───────────────────────────────────────────────
+# Walk up from the resolved script path until we find ansible.cfg
+_find_repo_root() {
+  local dir
+  dir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+  while [[ "$dir" != "/" ]]; do
+    [[ -f "$dir/ansible.cfg" ]] && { echo "$dir"; return; }
+    dir="$(dirname "$dir")"
+  done
+  echo ""
+}
+
+ANSIBLE_DIR="$(_find_repo_root)"
+if [[ -z "$ANSIBLE_DIR" ]]; then
+  echo "ERROR: could not locate debstrap repo (no ansible.cfg found up the tree)" >&2
+  exit 1
+fi
+
+# ── Machine type resolution ───────────────────────────────────────────────────
+case "$(hostname)" in
+  sm-laptop)  DEFAULT_MACHINE="laptop"  ;;
+  sm-desktop) DEFAULT_MACHINE="desktop" ;;
+  sm-server)  DEFAULT_MACHINE="server"  ;;
+  sm-rpi)     DEFAULT_MACHINE="rpi"     ;;
+  *)          DEFAULT_MACHINE="laptop"  ;;
+esac
+
+# ── Parse arguments ───────────────────────────────────────────────────────────
+debstrap() {
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    cat <<'EOF'
+command: debstrap
+
+Runs an Ansible playbook with tag-based filtering.
+
+usage:
+  debstrap [--target MACHINE] [tags...] [--skip skip-tags...]
+
+options:
+  --target MACHINE   Target machine (laptop|desktop|server|rpi).
+                     Defaults to the current hostname's machine type.
+                     Use this from your laptop to provision a remote host:
+                     debstrap --target server
+
+arguments:
+  tags...    Space-separated words form one tag. Commas delimit separate tags.
+  --skip     Everything after this flag is treated as tags to exclude.
+
+examples:
+  debstrap dot home, auth gpg          → runs dot_home and auth_gpg locally
+  debstrap --target server pkg, harden → provisions server remotely
+  debstrap --skip rice                 → full playbook skipping rice
+  debstrap dev go                      → installs Go toolchain
+
+note:
+  Tag multi-words use underscores: "dot home" → dot_home
+  Playbook is resolved by machine type, not just hostname.
+EOF
+    return 0
+  fi
+
+  local machine="$DEFAULT_MACHINE"
+  local tags=()
+  local skip_tags=()
+  local mode="tags"
+  local current_part=""
+
+  # Handle --target flag
+  if [[ "$1" == "--target" ]]; then
+    machine="$2"
+    shift 2
+  fi
+
+  for arg in "$@"; do
+    if [[ "$arg" == "--skip" ]]; then
+      [[ -n "$current_part" ]] && {
+        [[ "$mode" == "tags" ]] && tags+=("$current_part") || skip_tags+=("$current_part")
+        current_part=""
+      }
+      mode="skip"
+      continue
+    fi
+
+    if [[ "$arg" == *,* ]]; then
+      IFS=',' read -ra parts <<< "$arg"
+
+      local first="${parts[0]}"
+      first="${first#"${first%%[![:space:]]*}"}"
+      first="${first%"${first##*[![:space:]]}"}"
+
+      [[ -n "$current_part" ]] && current_part="${current_part}_${first}" || current_part="$first"
+      [[ -n "$current_part" ]] && {
+        [[ "$mode" == "tags" ]] && tags+=("$current_part") || skip_tags+=("$current_part")
+        current_part=""
+      }
+
+      for ((i=1; i<${#parts[@]}; i++)); do
+        local part="${parts[i]}"
+        part="${part#"${part%%[![:space:]]*}"}"
+        part="${part%"${part##*[![:space:]]}"}"
+        part="${part// /_}"
+        [[ -z "$part" ]] && continue
+        current_part="$part"
+      done
+    else
+      arg="${arg#"${arg%%[![:space:]]*}"}"
+      arg="${arg%"${arg##*[![:space:]]}"}"
+      [[ -n "$current_part" ]] && current_part="${current_part}_${arg}" || current_part="$arg"
+    fi
+  done
+
+  [[ -n "$current_part" ]] && {
+    [[ "$mode" == "tags" ]] && tags+=("$current_part") || skip_tags+=("$current_part")
+  }
+
+  cd "${ANSIBLE_DIR}" || exit 1
+
+  local cmd="ansible-playbook -v playbooks/${machine}.yaml"
+  [[ ${#tags[@]}      -gt 0 ]] && cmd+=" --tags $(IFS=,; echo "${tags[*]}")"
+  [[ ${#skip_tags[@]} -gt 0 ]] && cmd+=" --skip-tags $(IFS=,; echo "${skip_tags[*]}")"
+
+  echo "Repo:    ${ANSIBLE_DIR}"
+  echo "Machine: ${machine}"
+  echo "Running: ${cmd}"
+  eval "$cmd"
+}
+
+debstrap "$@"

@@ -1,0 +1,9 @@
+---
+- name: Start nftables service and ensure it is enabled
+  ansible.builtin.systemd:
+    name:    nftables
+    state:   started
+    enabled: true
+  tags:
+    - auth
+    - auth_firewall

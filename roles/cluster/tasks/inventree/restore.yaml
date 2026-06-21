@@ -1,0 +1,30 @@
+---
+- name: Deploy restore script
+  ansible.builtin.copy:
+    src: inventree/restore.sh
+    dest: "{{ cluster_data_dir }}/inventree/restore.sh"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0755'
+  tags:
+    - cluster
+    - cluster_inventree_restore
+
+- name: Remove media directory
+  become: true
+  ansible.builtin.file:
+    path: /opt/inventree/data/media
+    state: absent
+  tags:
+    - cluster
+    - cluster_inventree_restore
+
+- name: Run restore script
+  ansible.builtin.shell:
+    cmd: "echo 'y' | {{ cluster_data_dir }}/inventree/restore.sh"
+  environment:
+    BACKUP_DIR: "/opt/inventree/backups"
+    KUBECONFIG: "{{ xdg_config_home}}/kube/config"
+  tags:
+    - cluster
+    - cluster_inventree_restore

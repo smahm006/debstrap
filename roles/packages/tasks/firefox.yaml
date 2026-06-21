@@ -1,0 +1,60 @@
+---
+- name: Ensure APT keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  tags:
+     - pkg
+     - pkg_firefox
+
+- name: Download Mozilla APT signing key
+  ansible.builtin.get_url:
+    url:  https://packages.mozilla.org/apt/repo-signing-key.gpg
+    dest: /etc/apt/keyrings/packages.mozilla.org.asc
+    mode: '0644'
+  tags:
+     - pkg
+     - pkg_firefox
+
+- name: Add Mozilla APT repository
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/mozilla.sources
+    mode: '0644'
+    content: |
+      Types: deb
+      URIs: https://packages.mozilla.org/apt
+      Suites: mozilla
+      Components: main
+      Signed-By: /etc/apt/keyrings/packages.mozilla.org.asc
+  tags:
+     - pkg
+     - pkg_firefox
+
+- name: Pin Mozilla repository
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/mozilla
+    mode: '0644'
+    content: |
+      Package: *
+      Pin: origin packages.mozilla.org
+      Pin-Priority: 1000
+  tags:
+     - pkg
+     - pkg_firefox
+
+- name: Update apt cache after adding Mozilla repo
+  ansible.builtin.apt:
+    update_cache: true
+  changed_when: false
+  tags:
+     - pkg
+     - pkg_firefox
+
+- name: Install Firefox
+  ansible.builtin.apt:
+    name: firefox
+    state: present
+  tags:
+     - pkg
+     - pkg_firefox

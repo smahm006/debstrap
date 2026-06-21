@@ -1,0 +1,48 @@
+---
+- name: Import task config.yaml
+  ansible.builtin.import_tasks: config.yaml
+  tags:
+    - xdg
+    - xdg_config
+
+- name: Import task data.yaml
+  ansible.builtin.import_tasks: data.yaml
+  tags:
+    - xdg
+    - xdg_data
+
+- name: Import task state.yaml
+  ansible.builtin.import_tasks: state.yaml
+  tags:
+    - xdg
+    - xdg_state
+
+- name: Import task cache.yaml
+  ansible.builtin.import_tasks: cache.yaml
+  tags:
+    - xdg
+    - xdg_cache
+
+- name: Import task bin.yaml
+  ansible.builtin.import_tasks: bin.yaml
+  tags:
+    - xdg
+    - xdg_bin
+
+- name: Import task home.yaml
+  ansible.builtin.import_tasks: home.yaml
+  tags:
+    - xdg
+    - xdg_home
+
+- name: Import task clean.yaml
+  ansible.builtin.import_tasks: clean.yaml
+  tags:
+    - xdg
+    - xdg_clean
+
+- name: Import task user-dirs.yaml
+  ansible.builtin.import_tasks: user-dirs.yaml
+  tags:
+    - xdg
+    - xdg_user_dirs

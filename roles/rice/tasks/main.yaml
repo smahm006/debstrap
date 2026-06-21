@@ -1,0 +1,37 @@
+---
+- ansible.builtin.import_tasks: sway.yaml
+  tags:
+    - rice
+    - rice_sway
+
+- ansible.builtin.import_tasks: waybar.yaml
+  tags:
+    - rice
+    - rice_waybar
+
+- ansible.builtin.import_tasks: clipboard.yaml
+  tags:
+    - rice
+    - rice_clipboard
+
+- ansible.builtin.import_tasks: fonts.yaml
+  tags:
+    - rice
+    - rice_fonts
+
+- ansible.builtin.import_tasks: theme.yaml
+  tags:
+    - rice
+    - rice_theme
+
+- become: true
+  ansible.builtin.import_tasks: ly.yaml
+  tags:
+    - rice
+    - rice_ly
+
+- become: true
+  ansible.builtin.import_tasks: keyd.yaml
+  tags:
+    - rice
+    - rice_keyd

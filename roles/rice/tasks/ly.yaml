@@ -1,0 +1,28 @@
+---
+- name: Clone ly repository
+  ansible.builtin.git:
+    repo:    https://codeberg.org/fairyglade/ly.git
+    dest:    /tmp/ly
+    version: master
+    update:  false
+  tags:
+    - rice
+    - rice_ly
+
+- name: Build ly
+  ansible.builtin.command:
+    cmd:   "{{ lab_home }}/toolchains/zig/zig build"
+    chdir: /tmp/ly
+  changed_when: false
+  tags:
+    - rice
+    - rice_ly
+
+- name: Install ly with systemd init
+  ansible.builtin.command:
+    cmd:   "{{ lab_home }}/toolchains/zig/zig build installexe -Dinit_system=systemd"
+    chdir: /tmp/ly
+  changed_when: false
+  tags:
+    - rice
+    - rice_ly

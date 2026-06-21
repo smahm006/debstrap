@@ -1,0 +1,12 @@
+---
+- name: Install clang toolchain
+  become: true
+  ansible.builtin.apt:
+    name:
+      - clang
+      - clang-tidy
+      - clang-tools
+    state: present
+    update_cache: true
+    install_recommends: false
+  tags: [dev, dev_cpp]

@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventree-worker
+  namespace: inventree
+  labels:
+    app: inventree-worker
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: inventree-worker
+  template:
+    metadata:
+      labels:
+        app: inventree-worker
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: inventree-worker
+          image: inventree/inventree:stable
+          command: ["invoke", "worker"]
+          envFrom:
+            - secretRef:
+                name: inventree-secrets
+          env:
+            - name: INVENTREE_DB_ENGINE
+              value: postgresql
+            - name: INVENTREE_DB_HOST
+              value: inventree-db
+            - name: INVENTREE_DB_PORT
+              value: "5432"
+            - name: INVENTREE_AUTO_UPDATE
+              value: "True"
+            - name: INVENTREE_CACHE_HOST
+              value: inventree-cache
+            - name: INVENTREE_CACHE_PORT
+              value: "6379"
+            - name: INVENTREE_DEBUG
+              value: "False"
+            - name: INVENTREE_LOG_LEVEL
+              value: WARNING
+          volumeMounts:
+            - name: data
+              mountPath: /home/inventree/data
+      volumes:
+        - name: data
+          hostPath:
+            path: /opt/inventree/data
+            type: Directory

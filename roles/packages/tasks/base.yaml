@@ -1,0 +1,26 @@
+---
+- name: Install base packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - bash-completion
+      - build-essential
+      - ca-certificates
+      - curl
+      - dkms
+      - git
+      - gnupg
+      - gnupg2
+      - linux-base
+      - lsb-release
+      - man-db
+      - manpages
+      - net-tools
+      - openssh-server
+      - suckless-tools
+      - wget
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_base

@@ -1,0 +1,138 @@
+---
+# ── Layer 1: Common root dotfiles ────────────────────────────────────────────
+- name: Find common root dotfiles
+  become: false
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/common/root"
+    file_type: file
+    recurse: true
+  register: common_root_dotfiles
+  delegate_to: localhost
+  tags:
+    - dot
+    - dot_root
+
+- name: Ensure parent dirs exist (common root)
+  ansible.builtin.file:
+    path: "/{{ item.path | regex_replace('^' ~ role_path ~ '/files/common/root/', '') | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop: "{{ common_root_dotfiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  tags:
+    - dot
+    - dot_root
+
+- name: Copy common root dotfiles
+  ansible.builtin.copy:
+    src:   "{{ item.path }}"
+    dest:  "/{{ item.path | regex_replace('^' ~ role_path ~ '/files/common/root/', '') }}"
+    owner: root
+    group: root
+    force: true
+    mode:  "{{ '0755' if item.path | regex_search('\\.sh$') else '0644' }}"
+  loop: "{{ common_root_dotfiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  tags:
+    - dot
+    - dot_root
+
+# ── Layer 2: Machine-specific root dotfiles ──────────────────────────────────
+- name: Check if machine-specific root dotfiles dir exists
+  become: false
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/{{ machine_type }}/root"
+  register: machine_root_dir
+  delegate_to: localhost
+  tags:
+    - dot
+    - dot_root
+
+- name: Find machine-specific root dotfiles
+  become: false
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/{{ machine_type }}/root"
+    file_type: file
+    recurse: true
+  register: machine_root_dotfiles
+  delegate_to: localhost
+  when: machine_root_dir.stat.exists
+  tags:
+    - dot
+    - dot_root
+
+- name: Ensure parent dirs exist (machine-specific root)
+  ansible.builtin.file:
+    path: "/{{ item.path | regex_replace('^' ~ role_path ~ '/files/' ~ machine_type ~ '/root/', '') | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  loop: "{{ machine_root_dotfiles.files | default([]) }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: machine_root_dir.stat.exists
+  tags:
+    - dot
+    - dot_root
+
+- name: Copy machine-specific root dotfiles
+  ansible.builtin.copy:
+    src:   "{{ item.path }}"
+    dest:  "/{{ item.path | regex_replace('^' ~ role_path ~ '/files/' ~ machine_type ~ '/root/', '') }}"
+    owner: root
+    group: root
+    force: true
+    mode:  "{{ '0755' if item.path | regex_search('\\.sh$') else '0644' }}"
+  loop: "{{ machine_root_dotfiles.files | default([]) }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: machine_root_dir.stat.exists
+  tags:
+    - dot
+    - dot_root
+
+# ── Layer 3: Templated root dotfiles (servers only) ──────────────────────────
+- name: Deploy sshd_config
+  ansible.builtin.template:
+    src:      "{{ role_path }}/templates/sshd_config.j2"
+    dest:     /etc/ssh/sshd_config
+    owner:    root
+    group:    root
+    mode:     '0644'
+    validate: 'sshd -t -f %s'
+  notify: restart sshd
+  when: machine_type in ['server', 'rpi']
+  tags:
+    - dot
+    - dot_root
+
+- name: Deploy nftables config
+  ansible.builtin.template:
+    src:   "{{ role_path }}/templates/nftables.conf.j2"
+    dest:  /etc/nftables.conf
+    owner: root
+    group: root
+    mode:  '0750'
+  notify: reload nftables
+  when: machine_type in ['server', 'rpi']
+  tags:
+    - dot
+    - dot_root
+
+- name: Deploy fail2ban jail config
+  ansible.builtin.template:
+    src:   "{{ role_path }}/templates/jail.local.j2"
+    dest:  /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode:  '0644'
+  notify: restart fail2ban
+  when: machine_type in ['server', 'rpi']
+  tags:
+    - dot
+    - dot_root

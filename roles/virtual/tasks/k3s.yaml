@@ -1,0 +1,39 @@
+---
+- name: Download k3s install script
+  ansible.builtin.get_url:
+    url: https://get.k3s.io
+    dest: /tmp/k3s-install.sh
+    mode: '0755'
+  tags:
+    - virt
+    - virt_k8s
+
+- name: Install k3s
+  ansible.builtin.command:
+    cmd: /tmp/k3s-install.sh
+  environment:
+    INSTALL_K3S_EXEC: "--disable servicelb --disable local-storage"
+  tags:
+    - virt
+    - virt_k8s
+
+- name: Ensure k3s is running
+  ansible.builtin.systemd:
+    name: k3s
+    state: started
+    enabled: true
+  tags:
+    - virt
+    - virt_k8s
+
+- name: Copy kubeconfig to user-accessible path
+  ansible.builtin.copy:
+    src:        /etc/rancher/k3s/k3s.yaml
+    dest:       "{{ xdg_config_home }}/kube/config"
+    owner:      "{{ home_user }}"
+    group:      "{{ home_user }}"
+    mode:       '0600'
+    remote_src: true
+  tags:
+    - virt
+    - virt_k3s

@@ -1,0 +1,10 @@
+---
+- name: Provision desktop
+  hosts: sm-desktop
+  connection: local
+  roles:
+    - role: xdg
+    - role: dotfiles
+    - role: packages
+    - role: authentication
+    - role: development

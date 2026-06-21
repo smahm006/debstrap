@@ -1,0 +1,72 @@
+---
+- name: Install sway and Wayland build dependencies
+  become: true
+  ansible.builtin.apt:
+    name:
+      - libwayland-dev
+      - libpcre2-dev
+      - libjson-c-dev
+      - libpango1.0-dev
+      - libcairo2-dev
+      - libgdk-pixbuf-2.0-dev
+      - libdrm-dev
+      - libgbm-dev
+      - libinput-dev
+      - libseat-dev
+      - libxkbcommon-dev
+      - libxcb-dri3-dev
+      - libxcb-present-dev
+      - libxcb-res0-dev
+      - libxcb-render-util0-dev
+      - libxcb-ewmh-dev
+      - libxcb-icccm4-dev
+      - libliftoff-dev
+      - libdisplay-info-dev
+      - libpixman-1-dev
+      - libgles2-mesa-dev
+      - hwdata
+      - wayland-protocols
+      - sway
+      - swaylock
+      - sway-notification-center
+      - wl-clipboard
+      - grim
+      - grimshot
+      - foot
+      - swayidle
+    state: present
+    update_cache: true
+    install_recommends: false
+  tags:
+    - rice
+    - rice_sway
+
+- name: Download chayang
+  ansible.builtin.get_url:
+    url:  "https://gitlab.freedesktop.org/emersion/chayang/-/archive/v0.1.0/chayang-v0.1.0.zip"
+    dest: /tmp/chayang.zip
+    mode: '0755'
+  tags:
+    - rice
+    - rice_sway
+
+- name: Unarchive chayang
+  ansible.builtin.unarchive:
+    src:        /tmp/chayang.zip
+    dest:       /tmp
+    remote_src: true
+    list_files: true
+  register: chayang_contents
+  tags:
+    - rice
+    - rice_sway
+
+- name: Build and install chayang
+  become: true
+  ansible.builtin.shell:
+    cmd:   "meson build && ninja -C build install"
+    chdir: "/tmp/{{ chayang_contents.files[0] }}"
+  changed_when: false
+  tags:
+    - rice
+    - rice_sway

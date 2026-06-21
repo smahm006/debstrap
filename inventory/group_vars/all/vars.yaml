@@ -1,0 +1,65 @@
+---
+# ── Identity ─────────────────────────────────────────────────────────────────
+home_user: smahm
+user_home: "/home/{{ home_user }}"
+
+# ── XDG Base Directories ─────────────────────────────────────────────────────
+xdg_cache_home:  "{{ user_home }}/.cache"
+xdg_config_home: "{{ user_home }}/.config"
+xdg_data_home:   "{{ user_home }}/.local/share"
+xdg_state_home:  "{{ user_home }}/.local/state"
+xdg_bin_home:    "{{ user_home }}/.local/bin"
+
+# ── XDG Config Directories  ─────────────────────────────────
+xdg_config_common:
+  - "{{ xdg_config_home }}"
+  - "{{ xdg_config_home }}/bash"
+  - "{{ xdg_config_home }}/bash/environment.d"
+  - "{{ xdg_config_home }}/git"
+  - "{{ xdg_config_home }}/gnupg"
+  - "{{ xdg_config_home }}/vim"
+  - "{{ xdg_config_home }}/python"
+  - "{{ xdg_config_home }}/npm"
+  - "{{ xdg_config_home }}/kube"
+
+# ── XDG Data Directories  ───────────────────────────────────
+xdg_data_common:
+  - "{{ xdg_data_home }}"
+  - "{{ xdg_data_home }}/python"
+  - "{{ xdg_data_home }}/npm"
+  - "{{ xdg_data_home }}/terminfo"
+
+# ── XDG State Directories  ──────────────────────────────────
+xdg_state_common:
+  - "{{ xdg_state_home }}"
+  - "{{ xdg_state_home }}/bash"
+  - "{{ xdg_state_home }}/less"
+  - "{{ xdg_state_home }}/python"
+  - "{{ xdg_state_home }}/node"
+  - "{{ xdg_state_home }}/vim/backup"
+  - "{{ xdg_state_home }}/vim/swap"
+  - "{{ xdg_state_home }}/vim/undo"
+  - "{{ xdg_state_home }}/vim/view"
+
+# ── XDG Cache Directories  ──────────────────────────────────
+xdg_cache_common:
+  - "{{ xdg_cache_home }}"
+  - "{{ xdg_cache_home }}/python"
+
+# ── XDG Home Directories ───────────────────────────────────────────────────
+lab_home:  "{{ user_home }}/lab"
+dump_home: "{{ user_home }}/dump"
+org_home:  "{{ user_home }}/org"
+apps_home: "{{ user_home }}/apps"
+xdg_home_common:
+  - "{{ lab_home }}"
+  - "{{ lab_home }}/resources"
+  - "{{ lab_home }}/toolchains"
+  - "{{ lab_home }}/toolchains/rust"
+  - "{{ lab_home }}/toolchains/go"
+  - "{{ lab_home }}/toolchains/go/sdk"
+  - "{{ lab_home }}/toolchains/go/path"
+  - "{{ lab_home }}/toolchains/zig"
+  - "{{ dump_home }}"
+  - "{{ org_home }}"
+  - "{{ apps_home }}"

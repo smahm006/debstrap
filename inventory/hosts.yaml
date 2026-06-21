@@ -1,0 +1,25 @@
+---
+all:
+  children:
+    clients:
+      hosts:
+        sm-laptop:
+          ansible_host: sm-laptop
+          ansible_user: smahm
+          ansible_connection: local
+          machine_type: laptop
+        sm-desktop:
+          ansible_host: sm-desktop
+          ansible_user: smahm
+          ansible_connection: local
+          machine_type: desktop
+    servers:
+      hosts:
+        sm-server:
+          ansible_host: sm-server
+          ansible_user: smahm
+          machine_type: server
+        sm-rpi:
+          ansible_host: sm-rpi
+          ansible_user: smahm
+          machine_type: rpi

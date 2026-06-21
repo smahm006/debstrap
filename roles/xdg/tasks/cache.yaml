@@ -1,0 +1,32 @@
+---
+- name: Create common XDG cache directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_cache_common }}"
+  tags:
+    - xdg
+    - xdg_cache
+
+- name: Create group XDG cache directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_cache_group | default([]) }}"
+  when: xdg_cache_group is defined
+  tags:
+    - xdg
+    - xdg_cache
+
+- name: Create host XDG cache directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_cache_host | default([]) }}"
+  when: xdg_cache_host is defined
+  tags:
+    - xdg
+    - xdg_cache

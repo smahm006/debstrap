@@ -1,0 +1,13 @@
+---
+- name: Install laptop specific power packages
+  ansible.builtin.apt:
+    name:
+      - acpi
+      - tlp
+      - upower
+    state: present
+    install_recommends: true
+  when: machine_type == 'laptop'
+  tags:
+    - pkg
+    - pkg_power

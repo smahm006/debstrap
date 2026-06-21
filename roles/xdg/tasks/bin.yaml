@@ -1,0 +1,11 @@
+---
+- name: Create common XDG state directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_state_dirs_common | default([]) }}"
+  when: xdg_state_dirs_common is defined
+  tags:
+    - xdg
+    - xdg_state

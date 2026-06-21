@@ -1,0 +1,73 @@
+---
+- name: Install noto fonts
+  become: true
+  ansible.builtin.apt:
+    name: fonts-noto
+    state: present
+    update_cache: true
+    install_recommends: true
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Download Maple Mono font
+  ansible.builtin.get_url:
+    url:  https://github.com/subframe7536/Maple-font/releases/latest/download/MapleMonoNormal-TTF.zip
+    dest: /tmp/MapleMono.zip
+    mode: '0644'
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Unarchive Maple Mono font
+  ansible.builtin.unarchive:
+    src: /tmp/MapleMono.zip
+    dest: "{{ xdg_data_home }}/fonts/MapleMono"
+    remote_src: true
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Download Nerd Fonts SourceCodePro
+  ansible.builtin.get_url:
+    url:  https://github.com/ryanoasis/nerd-fonts/releases/latest/download/SourceCodePro.zip
+    dest: /tmp/NerdFontsSourceCodePro.zip
+    mode: '0644'
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Unarchive Nerd Fonts SourceCodePro
+  ansible.builtin.unarchive:
+    src: /tmp/NerdFontsSourceCodePro.zip
+    dest: "{{ xdg_data_home }}/fonts/SourceCodePro"
+    remote_src: true
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Download Nerd Fonts Symbols Only
+  ansible.builtin.get_url:
+    url:  https://github.com/ryanoasis/nerd-fonts/releases/latest/download/NerdFontsSymbolsOnly.zip
+    dest: /tmp/NerdFontsSymbolsOnly.zip
+    mode: '0644'
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Unarchive Nerd Fonts Symbols Only
+  ansible.builtin.unarchive:
+    src: /tmp/NerdFontsSymbolsOnly.zip
+    dest: "{{ xdg_data_home }}/fonts/NerdFontsSymbolsOnly"
+    remote_src: true
+  tags:
+    - rice
+    - rice_fonts
+
+- name: Refresh font cache
+  ansible.builtin.command:
+    cmd: fc-cache -f -v
+  changed_when: false
+  tags:
+    - rice
+    - rice_fonts

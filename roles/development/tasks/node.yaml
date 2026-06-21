@@ -1,0 +1,52 @@
+---
+- name: Install nvm
+  ansible.builtin.shell:
+    cmd: |
+      export XDG_CONFIG_HOME="{{ xdg_config_home }}"
+      curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+    creates: "{{ xdg_config_home }}/nvm/nvm.sh"
+    executable: /bin/bash
+  tags:
+    - dev
+    - dev_node
+
+- name: Install latest LTS Node.js
+  ansible.builtin.shell:
+    cmd: |
+      export XDG_CONFIG_HOME="{{ xdg_config_home }}"
+      export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+      . "$NVM_DIR/nvm.sh"
+      nvm install --lts
+    executable: /bin/bash
+  changed_when: false
+  tags:
+    - dev
+    - dev_node
+
+- name: Install pnpm
+  ansible.builtin.shell:
+    cmd: |
+      export XDG_CONFIG_HOME="{{ xdg_config_home }}"
+      export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+      . "$NVM_DIR/nvm.sh"
+      npm install --global pnpm
+    executable: /bin/bash
+  changed_when: false
+  tags:
+    - dev
+    - dev_node
+
+- name: Install Node language servers
+  ansible.builtin.shell:
+    cmd: |
+      export XDG_CONFIG_HOME="{{ xdg_config_home }}"
+      export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+      . "$NVM_DIR/nvm.sh"
+      npm add -g yaml-language-server
+      npm add -g vscode-langservers-extracted
+    executable: /bin/bash
+  when: inventory_hostname in groups['clients']
+  changed_when: false
+  tags:
+    - dev
+    - dev_node

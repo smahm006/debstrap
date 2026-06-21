@@ -1,0 +1,17 @@
+---
+- name: Install security packages
+  ansible.builtin.apt:
+    name:
+      - cryptsetup
+      - dirmngr
+      - gnupg-agent
+      - pinentry-tty
+      - pcscd
+      - scdaemon
+      - yubikey-manager
+      - yubikey-personalization
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_security

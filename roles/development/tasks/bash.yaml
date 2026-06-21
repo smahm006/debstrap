@@ -1,0 +1,25 @@
+---
+- name: Install shfmt and shellcheck
+  become: true
+  ansible.builtin.apt:
+    name:
+      - shfmt
+      - shellcheck
+    state: present
+  tags:
+    - dev
+    - dev_bash
+
+- name: Install bash-language-server
+  ansible.builtin.shell:
+    cmd: |
+      export XDG_CONFIG_HOME="{{ xdg_config_home }}"
+      export NVM_DIR="$XDG_CONFIG_HOME/nvm"
+      . "$NVM_DIR/nvm.sh"
+      npm add -g bash-language-server
+    executable: /bin/bash
+  when: inventory_hostname in groups['clients']
+  changed_when: false
+  tags:
+    - dev
+    - dev_bash

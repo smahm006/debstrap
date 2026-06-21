@@ -1,0 +1,38 @@
+---
+- name: Install network packages
+  ansible.builtin.apt:
+    name:
+      - ca-certificates
+      - curl
+      - network-manager
+      - nmap
+      - wget
+      - net-tools
+      - wireless-tools
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_network
+
+- name: Install laptop specific network packages
+  ansible.builtin.apt:
+    name:
+      - iwd
+    state: present
+    install_recommends: false
+  when: machine_type == 'laptop'
+  tags:
+    - pkg
+    - pkg_network
+
+- name: Install server specific network packages
+  ansible.builtin.apt:
+    name:
+      - openssh-server
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['servers']
+  tags:
+    - pkg
+    - pkg_network

@@ -1,0 +1,32 @@
+---
+- name: Create common XDG config directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_config_common }}"
+  tags:
+    - xdg
+    - xdg_config
+
+- name: Create group XDG config directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_config_group | default([]) }}"
+  when: xdg_config_group is defined
+  tags:
+    - xdg
+    - xdg_config
+
+- name: Create host XDG config directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ xdg_config_host | default([]) }}"
+  when: xdg_config_host is defined
+  tags:
+    - xdg
+    - xdg_config

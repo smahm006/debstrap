@@ -1,0 +1,41 @@
+---
+xdg_config_group:
+  - "{{ xdg_config_home }}/emacs"
+  - "{{ xdg_config_home }}/maven"
+  - "{{ xdg_config_home }}/aws"
+
+xdg_data_group:
+  - "{{ xdg_data_home }}/wine"
+  - "{{ xdg_data_home }}/fonts"
+  - "{{ xdg_data_home }}/fonts/MapleMono"
+  - "{{ xdg_data_home }}/fonts/NerdFontsSymbolsOnly"
+  - "{{ xdg_data_home }}/fonts/SourceCodePro"
+  - "{{ xdg_data_home }}/icons"
+  - "{{ xdg_data_home }}/themes"
+  - "{{ xdg_data_home }}/terminfo"
+  - "{{ xdg_data_home }}/.pki"
+
+xdg_cache_group:
+  - "{{ xdg_cache_home }}/X11"
+
+xdg_home_group:
+  - "{{ lab_home }}/projects"
+  - "{{ lab_home }}/projects/private"
+  - "{{ lab_home }}/projects/public"
+  - "{{ lab_home }}/projects/archive"
+  - "{{ lab_home }}/projects/sandbox"
+  - "{{ lab_home }}/vms"
+  - "{{ lab_home }}/vms/vagrant"
+  - "{{ user_home }}/media"
+  - "{{ user_home }}/media/audio"
+  - "{{ user_home }}/media/videos"
+  - "{{ user_home }}/media/images"
+  - "{{ user_home }}/media/images/wallpaper"
+  - "{{ user_home }}/media/images/screenshot"
+  - "{{ user_home }}/media/images/misc"
+  - "{{ user_home }}/apps"
+  - "{{ org_home }}"
+  - "{{ org_home }}/books"
+  - "{{ org_home }}/inbox"
+  - "{{ org_home }}/notes"
+  - "{{ org_home }}/records"

@@ -1,0 +1,6 @@
+---
+- name: Import inventree service tasks
+  ansible.builtin.import_tasks: inventree/main.yaml
+  tags:
+    - cluster
+    - cluster_inventree

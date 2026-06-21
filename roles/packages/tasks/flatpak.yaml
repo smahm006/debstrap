@@ -1,0 +1,64 @@
+---
+- name: Install flatpak
+  become: true
+  ansible.builtin.apt:
+    name: flatpak
+    state: present
+  tags:
+     - pkg
+     - pkg_flatpak
+
+- name: Add Flathub repository
+  become: true
+  ansible.builtin.command:
+    cmd: flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+  register: flatpak_out
+  changed_when: flatpak_out.rc == 0
+  tags:
+     - pkg
+     - pkg_flatpak
+
+- name: Install Fastmail from Flathub
+  ansible.builtin.command:
+    cmd: flatpak install --noninteractive flathub com.fastmail.Fastmail
+  register: flatpak_app
+  changed_when: "'already installed' not in flatpak_app.stderr"
+  tags:
+     - pkg
+     - pkg_flatpak
+
+- name: Install Bitwarden from Flathub
+  ansible.builtin.command:
+    cmd: flatpak install --noninteractive flathub com.bitwarden.desktop
+  register: flatpak_app
+  changed_when: "'already installed' not in flatpak_app.stderr"
+  tags:
+     - pkg
+     - pkg_flatpak
+
+- name: Find all Flathub desktop files
+  become: true
+  ansible.builtin.find:
+    paths: /var/lib/flatpak/exports/share/applications/
+    patterns: "*.desktop"
+    file_type: link
+  register: desktop_files
+  when: machine_type == 'laptop'
+  tags:
+     - pkg
+     - pkg_flatpak
+
+- name: Add Wayland flags to Flatpak .desktop files
+  become: true
+  ansible.builtin.replace:
+    path: "{{ item.path }}"
+    regexp: '^(Exec=.*flatpak run\s+(?:-[^\s]+\s+)*)([^\s]+)(.*)$'
+    replace: '\1--socket=wayland \2 -ozone-platform-hint=auto --enable-features=WaylandWindowDecorations\3'
+    backup: true
+  loop: "{{ desktop_files.files }}"
+  when:
+    - machine_type == 'laptop'
+    - item.path is file
+  tags:
+    - pkg
+    - pkg_flatpak

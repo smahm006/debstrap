@@ -1,0 +1,47 @@
+---
+- ansible.builtin.import_tasks: python.yaml
+  tags:
+    - dev
+    - dev_python
+
+- ansible.builtin.import_tasks: golang.yaml
+  tags:
+    - dev
+    - dev_go
+
+- ansible.builtin.import_tasks: rust.yaml
+  tags:
+    - dev
+    - dev_rust
+
+- ansible.builtin.import_tasks: zig.yaml
+  tags:
+    - dev
+    - dev_zig
+
+- ansible.builtin.import_tasks: node.yaml
+  tags:
+    - dev
+    - dev_node
+
+- ansible.builtin.import_tasks: bash.yaml
+  tags:
+    - dev
+    - dev_bash
+
+- ansible.builtin.import_tasks: yaml.yaml
+  tags:
+    - dev
+    - dev_yaml
+
+- ansible.builtin.import_tasks: cpp.yaml
+  when: inventory_hostname in groups['clients']
+  tags:
+    - dev
+    - dev_cpp
+
+- ansible.builtin.import_tasks: emacs.yaml
+  when: inventory_hostname in groups['clients']
+  tags:
+    - dev
+    - dev_emacs

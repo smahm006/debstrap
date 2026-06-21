@@ -1,0 +1,73 @@
+---
+- name: Create inventree directories
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0755'
+  loop:
+    - "{{ cluster_data_dir }}/inventree"
+    - "{{ cluster_data_dir }}/inventree/data"
+    - "{{ cluster_data_dir }}/inventree/db"
+    - "{{ cluster_data_dir }}/inventree/manifests"
+    - "{{ cluster_data_dir }}/inventree/backups"
+  tags:
+    - cluster
+    - cluster_inventree
+
+- name: Copy inventree manifests to server
+  ansible.builtin.copy:
+    src: inventree/
+    dest: "{{ cluster_data_dir }}/inventree/manifests/"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0644'
+  tags:
+    - cluster
+    - cluster_inventree
+
+- name: Apply inventree namespace
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ xdg_config_home }}/kube/config"
+    src: "{{ cluster_data_dir }}/inventree/manifests/namespace.yaml"
+  tags:
+    - cluster
+    - cluster_inventree
+
+- name: Deploy inventree secrets
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ xdg_config_home }}/kube/config"
+    definition: "{{ lookup('community.sops.sops', role_path ~ '/files/inventree/secrets.sops.yaml') | from_yaml }}"
+  tags:
+    - cluster
+    - cluster_inventree
+
+- name: Apply inventree manifests
+  kubernetes.core.k8s:
+    state: present
+    kubeconfig: "{{ xdg_config_home }}/kube/config"
+    src: "{{ cluster_data_dir }}/inventree/manifests/{{ item }}"
+  loop:
+    - configmap.yaml
+    - database.yaml
+    - cache.yaml
+    - server.yaml
+    - worker.yaml
+    - service.yaml
+  tags:
+    - cluster
+    - cluster_inventree
+
+- name: Import inventree backup tasks
+  ansible.builtin.import_tasks: backup.yaml
+  tags:
+    - cluster_inventree_backup
+
+- name: Import inventree restore tasks
+  ansible.builtin.import_tasks: restore.yaml
+  tags:
+    - cluster_inventree_restore

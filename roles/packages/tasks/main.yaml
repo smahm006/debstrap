@@ -1,0 +1,103 @@
+---
+- name: Update apt cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  tags:
+    - pkg
+
+- name: Import task base.yaml
+  ansible.builtin.import_tasks: base.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_base
+
+- name: Import task build.yaml
+  ansible.builtin.import_tasks: build.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_build
+
+- name: Import task network.yaml
+  ansible.builtin.import_tasks: network.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_network
+
+- name: Import task security.yaml
+  ansible.builtin.import_tasks: security.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_security
+
+- name: Import task power.yaml
+  ansible.builtin.import_tasks: power.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_power
+
+- name: Import task utility.yaml
+  ansible.builtin.import_tasks: utility.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_utility
+
+- name: Import task apps.yaml
+  ansible.builtin.import_tasks: apps.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_apps
+
+- name: Import task audio.yaml
+  ansible.builtin.import_tasks: audio.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_audio
+
+- name: Import task android.yaml
+  ansible.builtin.import_tasks: android.yaml
+  become: true
+  tags:
+    - pkg
+    - pkg_android
+
+- name: Import task firefox.yaml
+  ansible.builtin.import_tasks: firefox.yaml
+  become: true
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_firefox
+
+- name: Import task flatpak.yaml
+  ansible.builtin.import_tasks: flatpak.yaml
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_flatpak
+
+- name: Import task unattended.yaml
+  become: true
+  ansible.builtin.import_tasks: unattended.yaml
+  when: inventory_hostname in groups['servers']
+  tags:
+    - pkg
+    - pkg_unattended
+
+- name: Upgrade all packages to latest version
+  become: true
+  ansible.builtin.apt:
+    upgrade: full
+    update_cache: true
+  tags:
+    - pkg
+    - pkg_upgrade

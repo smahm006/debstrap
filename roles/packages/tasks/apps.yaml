@@ -1,0 +1,65 @@
+---
+- name: Install applications packages
+  ansible.builtin.apt:
+    name:
+      - gparted
+      - vim
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_apps
+
+- name: Install laptop specific applications packages
+  ansible.builtin.apt:
+    name:
+      - blueman
+      - sxiv
+      - thunar
+      - thunar-archive-plugin
+      - thunar-media-tags-plugin
+      - thunar-volman
+      - zathura
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_apps
+
+- name: Install client specific applications packages
+  ansible.builtin.apt:
+    name:
+      - libreoffice
+      - mupdf
+      - qbittorrent
+      - redshift-gtk
+      - ffmpeg
+      - ffmpegthumbnailer
+      - imagemagick
+      - wine
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_apps
+
+- name: Install server specific applications packages
+  ansible.builtin.apt:
+    name:
+      - fail2ban
+      - htop
+      - iotop
+      - lsof
+      - nftables
+      - strace
+      - tcpdump
+      - unattended-upgrades
+      - apt-listchanges
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['servers']
+  tags:
+    - pkg
+    - pkg_apps

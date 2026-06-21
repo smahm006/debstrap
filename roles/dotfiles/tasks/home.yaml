@@ -1,0 +1,142 @@
+---
+# ── Layer 1: Common dotfiles (all machines) ──────────────────────────────────
+- name: Find common home dotfiles
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/common/home"
+    file_type: file
+    hidden: true
+    recurse: true
+  register: common_home_dotfiles
+  delegate_to: localhost
+  tags:
+    - dot
+    - dot_home
+
+- name: Ensure parent dirs exist (common)
+  become: true
+  ansible.builtin.file:
+    path: "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/common/home/', '') | dirname }}"
+    state: directory
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0755'
+  loop: "{{ common_home_dotfiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  tags:
+    - dot
+    - dot_home
+
+- name: Deploy common home dotfiles (local — symlink)
+  ansible.builtin.file:
+    src:   "{{ item.path }}"
+    dest:  "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/common/home/', '') }}"
+    state: link
+    force: true
+  loop: "{{ common_home_dotfiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: ansible_connection == 'local'
+  tags:
+    - dot
+    - dot_home
+
+- name: Deploy common home dotfiles (remote — copy)
+  ansible.builtin.copy:
+    src:   "{{ item.path }}"
+    dest:  "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/common/home/', '') }}"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode:  preserve
+    force: true
+  loop: "{{ common_home_dotfiles.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: ansible_connection != 'local'
+  tags:
+    - dot
+    - dot_home
+
+# ── Layer 2: Machine-specific dotfiles ───────────────────────────────────────
+- name: Check if machine-specific home dotfiles dir exists
+  ansible.builtin.stat:
+    path: "{{ role_path }}/files/{{ machine_type }}/home"
+  register: machine_home_dir
+  delegate_to: localhost
+  tags:
+    - dot
+    - dot_home
+
+- name: Find machine-specific home dotfiles
+  ansible.builtin.find:
+    paths: "{{ role_path }}/files/{{ machine_type }}/home"
+    file_type: file
+    hidden: true
+    recurse: true
+  register: machine_home_dotfiles
+  delegate_to: localhost
+  when: machine_home_dir.stat.exists
+  tags:
+    - dot
+    - dot_home
+
+- name: Ensure parent dirs exist (machine-specific)
+  become: true
+  ansible.builtin.file:
+    path: "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/' ~ machine_type ~ '/home/', '') | dirname }}"
+    state: directory
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0755'
+  loop: "{{ machine_home_dotfiles.files | default([]) }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when: machine_home_dir.stat.exists
+  tags:
+    - dot
+    - dot_home
+
+- name: Deploy machine-specific home dotfiles (local — symlink)
+  ansible.builtin.file:
+    src:   "{{ item.path }}"
+    dest:  "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/' ~ machine_type ~ '/home/', '') }}"
+    state: link
+    force: true
+  loop: "{{ machine_home_dotfiles.files | default([]) }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when:
+    - machine_home_dir.stat.exists
+    - ansible_connection == 'local'
+  tags:
+    - dot
+    - dot_home
+
+- name: Deploy machine-specific home dotfiles (remote — copy)
+  ansible.builtin.copy:
+    src:   "{{ item.path }}"
+    dest:  "{{ user_home }}/{{ item.path | regex_replace('^' ~ role_path ~ '/files/' ~ machine_type ~ '/home/', '') }}"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode:  preserve
+    force: true
+  loop: "{{ machine_home_dotfiles.files | default([]) }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  when:
+    - machine_home_dir.stat.exists
+    - ansible_connection != 'local'
+  tags:
+    - dot
+    - dot_home
+
+# ── Layer 3: Templated home dotfiles ─────────────────────────────────────────
+- name: Template SSH client config
+  ansible.builtin.template:
+    src:   "{{ role_path }}/templates/ssh_config.j2"
+    dest:  "{{ user_home }}/.ssh/config"
+    mode:  '0600'
+  when: inventory_hostname in groups['clients']
+  tags:
+    - dot
+    - dot_home

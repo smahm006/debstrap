@@ -1,0 +1,43 @@
+---
+- name: Map system architecture to Zig arch
+  ansible.builtin.set_fact:
+    zig_arch: "{{ {'x86_64': 'x86_64', 'aarch64': 'aarch64', 'armv7l': 'arm'}[ansible_architecture] }}"
+  tags:
+    - dev
+    - dev_zig
+
+- name: Download Zig
+  ansible.builtin.get_url:
+    url:  "https://ziglang.org/download/0.16.0/zig-{{ zig_arch }}-{{ ansible_system | lower }}-0.16.0.tar.xz"
+    dest: /tmp/zig.tar.xz
+    mode: '0644'
+  tags:
+    - dev
+    - dev_zig
+
+- name: Remove old Zig toolchain
+  ansible.builtin.file:
+    path: "{{ lab_home }}/toolchains/zig"
+    state: absent
+  tags:
+    - dev
+    - dev_zig
+
+- name: Create Zig toolchain directory
+  ansible.builtin.file:
+    path: "{{ lab_home }}/toolchains/zig"
+    state: directory
+    mode: '0755'
+  tags:
+    - dev
+    - dev_zig
+
+- name: Extract Zig
+  ansible.builtin.unarchive:
+    src:        /tmp/zig.tar.xz
+    dest:       "{{ lab_home }}/toolchains/zig"
+    extra_opts: [--strip-components=1]
+    remote_src: true
+  tags:
+    - dev
+    - dev_zig

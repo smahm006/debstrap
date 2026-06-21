@@ -1,0 +1,74 @@
+---
+- name: Ensure SSH directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.ssh"
+    state: directory
+    mode: '0700'
+  tags:
+    - auth
+    - auth_ssh
+
+- name: Find all SSH files
+  ansible.builtin.find:
+    paths: "{{ user_home }}/.ssh"
+    recurse: true
+  register: ssh_files
+  tags:
+    - auth
+    - auth_ssh
+
+- name: Fix permissions for SSH files
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    mode: >-
+      {% if item.path | regex_search('authorized_keys$') %}
+      0644
+      {% elif item.path | regex_search('\.pub$') %}
+      0644
+      {% else %}
+      {{ '0700' if item.isdir else '0600' }}
+      {% endif %}
+  loop: "{{ ssh_files.files }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  tags:
+    - auth
+    - auth_ssh
+
+# ── Server: deploy GPG SSH public key ────────────────────────────────────────
+- name: Export GPG SSH public key
+  ansible.builtin.command:
+    cmd: gpg --export-ssh-key D5725EEFAB586861
+  environment:
+    GNUPGHOME: "{{ xdg_config_home }}/gnupg"
+  register: gpg_ssh_pubkey
+  delegate_to: localhost
+  changed_when: false
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_ssh
+
+- name: Ensure server .ssh directory exists
+  ansible.builtin.file:
+    path: "{{ user_home }}/.ssh"
+    state: directory
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0700'
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_ssh
+
+- name: Deploy authorized_keys on server
+  ansible.builtin.copy:
+    content: "{{ gpg_ssh_pubkey.stdout }}\n"
+    dest: "{{ user_home }}/.ssh/authorized_keys"
+    owner: "{{ home_user }}"
+    group: "{{ home_user }}"
+    mode: '0644'
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_ssh

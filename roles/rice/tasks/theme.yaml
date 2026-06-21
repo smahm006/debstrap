@@ -1,0 +1,34 @@
+---
+- name: Enable dark mode for GTK3
+  ansible.builtin.blockinfile:
+    path:   "{{ xdg_config_home }}/gtk-3.0/settings.ini"
+    create: true
+    block: |
+      [Settings]
+      gtk-application-prefer-dark-theme=1
+      gtk-theme-name=Materia-Blackout
+      gtk-icon-theme-name=Materia-Blackout-Icons
+      gtk-cursor-theme-name=Notwaita-Black
+    marker_begin: "BEGIN CUSTOM CONFIGURATION"
+    marker_end:   "END CUSTOM CONFIGURATION"
+    state: present
+  tags:
+    - rice
+    - rice_theme
+
+- name: Enable dark mode for GTK4
+  ansible.builtin.blockinfile:
+    path:   "{{ xdg_config_home }}/gtk-4.0/settings.ini"
+    create: true
+    block: |
+      [Settings]
+      gtk-application-prefer-dark-theme=1
+      gtk-theme-name=Materia-Blackout
+      gtk-icon-theme-name=Materia-Blackout-Icons
+      gtk-cursor-theme-name=Notwaita-Black
+    marker_begin: "BEGIN CUSTOM CONFIGURATION"
+    marker_end:   "END CUSTOM CONFIGURATION"
+    state: present
+  tags:
+    - rice
+    - rice_theme

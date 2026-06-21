@@ -1,0 +1,13 @@
+---
+xdg_config_host:
+  - "{{ xdg_config_home }}/sway"
+  - "{{ xdg_config_home }}/sway/config.d"
+  - "{{ xdg_config_home }}/sway/scripts"
+  - "{{ xdg_config_home }}/swaync"
+  - "{{ xdg_config_home }}/tofi"
+  - "{{ xdg_config_home }}/waybar"
+  - "{{ xdg_config_home }}/foot"
+  - "{{ xdg_config_home }}/swaylock"
+  - "{{ xdg_config_home }}/gtk-2.0"
+  - "{{ xdg_config_home }}/gtk-3.0"
+  - "{{ xdg_config_home }}/gtk-4.0"

@@ -1,0 +1,37 @@
+---
+- name: Configure GPG and smartcard
+  ansible.builtin.import_tasks: gpg.yaml
+  when: inventory_hostname in groups['clients']
+  tags:
+    - auth
+    - auth_gpg
+
+- name: Configure client SSH config
+  ansible.builtin.import_tasks: ssh.yaml
+  tags:
+    - auth
+    - auth_ssh
+
+- name: Configure server SSH config
+  become: true
+  ansible.builtin.import_tasks: sshd.yaml
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_sshd
+
+- name: Configure server firewall config
+  become: true
+  ansible.builtin.import_tasks: firewall.yaml
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_firewall
+
+- name: Configure server fail2ban config
+  become: true
+  ansible.builtin.import_tasks: fail2ban.yaml
+  when: inventory_hostname in groups['servers']
+  tags:
+    - auth
+    - auth_gpg

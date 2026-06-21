@@ -1,0 +1,8 @@
+---
+- name: Provision Raspberry Pi
+  hosts: sm-rpi
+  roles:
+    - role: xdg
+    - role: dotfiles
+    - role: packages
+    - role: authentication

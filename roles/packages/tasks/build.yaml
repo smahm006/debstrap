@@ -1,0 +1,18 @@
+---
+- name: Install build tools and development helpers
+  ansible.builtin.apt:
+    name:
+      - automake
+      - autotools-dev
+      - cmake
+      - gcc
+      - make
+      - meson
+      - ninja-build
+      - scdoc
+      - texinfo
+    state: present
+    install_recommends: false
+  tags:
+    - pkg
+    - pkg_build

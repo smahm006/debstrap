@@ -1,0 +1,21 @@
+---
+- name: Deploy SSH banner
+  ansible.builtin.copy:
+    dest:  /etc/ssh/banner
+    owner: root
+    group: root
+    mode:  '0644'
+    content: |
+      Authorized access only. All activity is monitored and logged.
+  tags:
+    - auth
+    - auth_sshd
+
+- name: Start SSH service and ensure it is enabled
+  ansible.builtin.service:
+    name: sshd
+    state: started
+    enabled: true
+  tags:
+    - auth
+    - auth_sshd

@@ -1,0 +1,24 @@
+---
+- name: Install yamllint
+  ansible.builtin.command:
+    cmd: "{{ xdg_bin_home }}/uv tool install --upgrade yamllint"
+  register: yamllint_result
+  changed_when: false
+  failed_when:
+    - yamllint_result.rc != 0
+    - "'already exists' not in yamllint_result.stderr"
+  tags:
+    - dev
+    - dev_yaml
+
+- name: Install yamlfmt
+  ansible.builtin.command:
+    cmd: "{{ xdg_bin_home }}/uv tool install --upgrade yamlfmt"
+  register: yamlfmt_result
+  changed_when: false
+  failed_when:
+    - yamlfmt_result.rc != 0
+    - "'already exists' not in yamlfmt_result.stderr"
+  tags:
+    - dev
+    - dev_yaml

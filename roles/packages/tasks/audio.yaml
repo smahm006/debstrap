@@ -1,0 +1,13 @@
+---
+- name: Install client specific audio packages
+  ansible.builtin.apt:
+    name:
+      - pipewire-pulse
+      - wireplumber
+      - pulseaudio-utils
+    state: present
+    install_recommends: false
+  when: inventory_hostname in groups['clients']
+  tags:
+    - pkg
+    - pkg_audio
